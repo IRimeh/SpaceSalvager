@@ -124,6 +124,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1171255123352787407}
   - component: {fileID: 6557304647632140256}
+  - component: {fileID: 6845208254870663333}
+  - component: {fileID: -7866854850006341183}
   m_Layer: 0
   m_Name: pfb_player
   m_TagString: Untagged
@@ -159,14 +161,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1244481902
+  GlobalObjectIdHash: 2237239715
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -174,3 +176,34 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &6845208254870663333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604564021314646404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8710c0e39548abc40adae4f7d5c2724f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RpcTest
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-7866854850006341183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604564021314646404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7190276b1884ee4d98189d90ed32a01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HelloWorld.HelloWorldPlayer
+  ShowTopMostFoldoutHeaderGroup: 1
+  Position:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: {x: 0, y: 0, z: 0}
