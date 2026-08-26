@@ -935,11 +935,11 @@ PlayerSettings:
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
-  cloudProjectId: 1dc4fab3-1a40-4e56-9f88-fc0c6aff9209
+  cloudProjectId: bb286d11-9a67-4ccd-9219-4cbd15b1fe48
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: FPSMultiplayerTemplate
-  organizationId: rimme_unity
+  projectName: SpaceSalvager
+  organizationId: danielowski
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
