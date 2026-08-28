@@ -1,97 +1,76 @@
-using System;
 using TMPro;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
+	//TODO When the mouse is moved fast it moves further
+	
 	[SerializeField] 
 	private Rigidbody rigidbody;
-	
 	[SerializeField]
 	private float mouseRotationPerUnit = 2.0f;
-
-	//This is the time it needs to reach the desired curser position
-	[SerializeField]
+	[SerializeField] //This is the time it needs to reach the desired curser position
 	private float mouseRotationDrag = 2.0f;
-
-	//TODO When the mouse is moved fast it moves further
-
 
 	[SerializeField] //In degrees/second
 	private float keyboardRotationAcceleration = 45.0f;
-
 	[SerializeField] //In degrees/second
 	private float keyboardRotationBrakeAcceleration = 180.0f;
-
 	[SerializeField] //In degrees/second
 	private float keyboardRotationMaxSpeed = 360.0f;
 
-
 	[SerializeField] //In meters/second
 	private float movementAcceleration = 2.2f;
-
 	[SerializeField] //In meters/second
 	private float brakeAcceleration = 8.7f;
-
 	[SerializeField] //In meters/second
 	private float movementMaxVelocity = 8.7f;
 
 	[SerializeField]
 	private Transform playerModel = null;
-
 	[SerializeField]
 	private Transform playerCamera = null;
 
 	private TextMeshProUGUI velocityDisplay = null;
-
 	private Vector3 inputVelocity = Vector3.zero;
-
 	private bool isBraking = false;
-
-	//In degrees/second (x = pitch, y = yaw, z = roll)
-	private Vector3 rotationVelocity = Vector3.zero;
-
-
+	
+	private Vector3 rotationVelocity = Vector3.zero; //In degrees/second (x = pitch, y = yaw, z = roll)
 	private Vector2 mouseRotationVelocity = Vector2.zero;
-
-	//TODO Gotta add audiolistener
 
 	[SerializeField]
 	InputActionReference LookInput;
-
 	[SerializeField]
 	InputActionReference MoveInput;
-
 	[SerializeField]
 	InputActionReference UpDownInput;
-
 	[SerializeField]
 	InputActionReference RollInput;
-
 	[SerializeField]
 	InputActionReference BrakeInput;
 
-
 	protected override void OnNetworkPostSpawn()
 	{
-		if (IsOwner)
-		{
-			playerCamera.gameObject.SetActive(true);
-			playerModel.gameObject.SetActive(false);
-		}
-	}
-
-	private void Start()
-	{
+		if (!IsOwner)
+			return;
+		
+		playerCamera.gameObject.SetActive(true);
+		playerModel.gameObject.SetActive(false);
+		
 		BrakeInput.action.performed += OnBrakeInputPerformed;
 		BrakeInput.action.canceled += OnBrakeInputCanceled;
 
 		Cursor.lockState = CursorLockMode.Locked;
 
 		velocityDisplay = FindObjectOfType<UIVelocity>().GetComponent<TextMeshProUGUI>();
+	}
+
+	public override void OnNetworkDespawn()
+	{
+		BrakeInput.action.performed -= OnBrakeInputPerformed;
+		BrakeInput.action.canceled -= OnBrakeInputCanceled;
 	}
 
 	private void OnBrakeInputCanceled(InputAction.CallbackContext context)
@@ -128,11 +107,7 @@ public class PlayerController : NetworkBehaviour
 		}
 
 		rotationVelocity.z = Mathf.Clamp(NewRollVelocity, -keyboardRotationMaxSpeed, keyboardRotationMaxSpeed);
-
-
-
 		mouseRotationVelocity += new Vector2(LookInput.action.ReadValue<Vector2>().x, -LookInput.action.ReadValue<Vector2>().y) * mouseRotationPerUnit;
-
 		mouseRotationVelocity = Vector2.Lerp(mouseRotationVelocity, Vector2.zero, mouseRotationDrag * Time.deltaTime);
 
 		transform.Rotate(Vector3.up, mouseRotationVelocity.x);
