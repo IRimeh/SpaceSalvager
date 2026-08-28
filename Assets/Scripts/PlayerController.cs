@@ -127,8 +127,6 @@ public class PlayerController : NetworkBehaviour
 			NewRollVelocity -= Mathf.Clamp(keyboardRotationBrakeAcceleration * Time.deltaTime * Mathf.Sign(NewRollVelocity), NewRollVelocity * -Mathf.Sign(NewRollVelocity), NewRollVelocity * Mathf.Sign(NewRollVelocity));
 		}
 
-		Debug.Log(LookInput.action.ReadValue<Vector2>());
-
 		rotationVelocity.z = Mathf.Clamp(NewRollVelocity, -keyboardRotationMaxSpeed, keyboardRotationMaxSpeed);
 
 

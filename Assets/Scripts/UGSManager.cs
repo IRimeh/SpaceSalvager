@@ -68,9 +68,6 @@ public class UGSManager : MonoBehaviour
 			NetworkManager.Singleton.StartHost();
 			Debug.Log($"Lobby created! Room Join Code: {lobby.LobbyCode}");
 
-			// Inside UGSManager.cs at the end of CreateLobbyAndHost:
-			Debug.Log($"Lobby created! Room Join Code: {lobby.LobbyCode}");
-
 			// Update UI status with the lobby code
 			FindObjectOfType<LobbyUIController>()?.UpdateStatus($"Lobby Created! Code: {lobby.LobbyCode}");
 		}
