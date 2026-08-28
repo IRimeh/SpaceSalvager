@@ -254,10 +254,10 @@
                 {
                     "name": "",
                     "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
-                    "path": "<Pointer>/delta",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -505,7 +505,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
+                    "name": "Positive",
                     "id": "7a784596-4657-4782-8dbd-f7517ac0e1fa",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -516,7 +516,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
+                    "name": "Negative",
                     "id": "5165b7d6-dc94-4818-87f9-19de94ddfd4f",
                     "path": "<Keyboard>/e",
                     "interactions": "",
