@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
+	[SerializeField] 
+	private Rigidbody rigidbody;
+	
 	[SerializeField]
 	private float mouseRotationPerUnit = 2.0f;
 
@@ -43,8 +46,6 @@ public class PlayerController : NetworkBehaviour
 	private Transform playerCamera = null;
 
 	private TextMeshProUGUI velocityDisplay = null;
-
-	private NetworkRigidbody networkRigidbody = null;
 
 	private Vector3 inputVelocity = Vector3.zero;
 
@@ -85,8 +86,6 @@ public class PlayerController : NetworkBehaviour
 
 	private void Start()
 	{
-		networkRigidbody = GetComponent<NetworkRigidbody>();
-
 		BrakeInput.action.performed += OnBrakeInputPerformed;
 		BrakeInput.action.canceled += OnBrakeInputCanceled;
 
@@ -152,22 +151,17 @@ public class PlayerController : NetworkBehaviour
 		if (isBraking)
 		{
 			//TODO Maybe use drag to brake?
-			//inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(playerRigidbody.linearVelocity.normalized) * brakeAcceleration * Time.fixedDeltaTime, playerRigidbody.linearVelocity.magnitude);
-			inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(networkRigidbody.GetLinearVelocity().normalized) * brakeAcceleration * Time.fixedDeltaTime, networkRigidbody.GetLinearVelocity().magnitude);
+			inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(rigidbody.linearVelocity.normalized) * brakeAcceleration * Time.fixedDeltaTime, rigidbody.linearVelocity.magnitude);
 		}
 		else
 		{
-			inputVelocity = inputVelocity * Time.fixedDeltaTime;
+			inputVelocity *= Time.fixedDeltaTime;
 		}
-
-		Vector3 NewVelocity = networkRigidbody.GetLinearVelocity() + transform.TransformDirection(inputVelocity);
-
-		Debug.Log(NewVelocity);
-
+		
+		Vector3 NewVelocity = rigidbody.linearVelocity + transform.TransformDirection(inputVelocity);
 		if (NewVelocity.magnitude <= movementMaxVelocity)
 		{
-			//playerRigidbody.linearVelocity = NewVelocity;
-			networkRigidbody.SetLinearVelocity(NewVelocity);
+			rigidbody.linearVelocity = NewVelocity;
 		}
 	}
 }
