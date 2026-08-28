@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 223155290}
   - component: {fileID: 223155289}
   - component: {fileID: 223155288}
+  - component: {fileID: 223155296}
   m_Layer: 0
   m_Name: Cube (7)
   m_TagString: Untagged
@@ -352,6 +353,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &223155296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223155287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,6 +841,7 @@ GameObject:
   - component: {fileID: 967425545}
   - component: {fileID: 967425544}
   - component: {fileID: 967425543}
+  - component: {fileID: 967425551}
   m_Layer: 0
   m_Name: Cube (6)
   m_TagString: Untagged
@@ -1044,6 +1059,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &967425551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967425542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1027681119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1088,7 @@ GameObject:
   - component: {fileID: 1027681122}
   - component: {fileID: 1027681121}
   - component: {fileID: 1027681120}
+  - component: {fileID: 1027681128}
   m_Layer: 0
   m_Name: Cube (5)
   m_TagString: Untagged
@@ -1277,6 +1306,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1027681128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027681119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1094147184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,6 +1414,7 @@ GameObject:
   - component: {fileID: 1264820721}
   - component: {fileID: 1264820720}
   - component: {fileID: 1264820719}
+  - component: {fileID: 1264820727}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -1589,6 +1632,19 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &1264820727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264820718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1331284879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,6 +1774,7 @@ GameObject:
   - component: {fileID: 1446794415}
   - component: {fileID: 1446794414}
   - component: {fileID: 1446794413}
+  - component: {fileID: 1446794421}
   m_Layer: 0
   m_Name: Cube (8)
   m_TagString: Untagged
@@ -1935,6 +1992,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1446794421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446794412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1459425620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,6 +2021,7 @@ GameObject:
   - component: {fileID: 1459425623}
   - component: {fileID: 1459425622}
   - component: {fileID: 1459425621}
+  - component: {fileID: 1459425629}
   m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Untagged
@@ -2168,6 +2239,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1459425629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459425620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb566519dcc3cb54d8849bb19e1ce4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeOwnerOnTouch
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &1740558787 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7342386611645646902, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
