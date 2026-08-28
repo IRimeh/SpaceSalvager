@@ -788,10 +788,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1229512733
       objectReference: {fileID: 0}
-    - target: {fileID: 1094160525135604975, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 1577972378
-      objectReference: {fileID: 0}
     - target: {fileID: 3318809048462237949, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
       propertyPath: ugsManager
       value: 
@@ -800,6 +796,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Host/JoinUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8334938948221339138, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
+      propertyPath: ugsManager
+      value: 
+      objectReference: {fileID: 902153953}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
