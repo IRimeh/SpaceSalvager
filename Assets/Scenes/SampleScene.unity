@@ -882,6 +882,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1740558787 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7342386611645646902, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
+  m_PrefabInstance: {fileID: 3000589729804564175}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1753940146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,6 +1053,10 @@ PrefabInstance:
       value: 1229512733
       objectReference: {fileID: 0}
     - target: {fileID: 3318809048462237949, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
+      propertyPath: statusText
+      value: 
+      objectReference: {fileID: 1740558787}
+    - target: {fileID: 3318809048462237949, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
       propertyPath: ugsManager
       value: 
       objectReference: {fileID: 902153953}
@@ -1053,7 +1068,8 @@ PrefabInstance:
       propertyPath: ugsManager
       value: 
       objectReference: {fileID: 902153953}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3318809048462237949, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

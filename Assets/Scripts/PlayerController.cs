@@ -89,7 +89,7 @@ public class PlayerController : NetworkBehaviour
 		BrakeInput.action.performed += OnBrakeInputPerformed;
 		BrakeInput.action.canceled += OnBrakeInputCanceled;
 
-		//Cursor.lockState = CursorLockMode.Locked;
+		Cursor.lockState = CursorLockMode.Locked;
 
 		velocityDisplay = FindObjectOfType<UIVelocity>().GetComponent<TextMeshProUGUI>();
 	}

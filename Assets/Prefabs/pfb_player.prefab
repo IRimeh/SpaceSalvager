@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2810171957
+  GlobalObjectIdHash: 2237239715
   InScenePlacedSourceGlobalObjectIdHash: 2237239715
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   rigidbody: {fileID: 6678942100144651191}
-  mouseRotationPerUnit: 0.001
+  mouseRotationPerUnit: 0.002
   mouseRotationDrag: 3
   keyboardRotationAcceleration: 4
   keyboardRotationBrakeAcceleration: 8
