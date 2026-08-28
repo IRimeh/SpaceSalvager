@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,12 +44,11 @@ public class PlayerController : NetworkBehaviour
 
 	private TextMeshProUGUI velocityDisplay = null;
 
-
-	private Rigidbody playerRigidbody = null;
+	private NetworkRigidbody networkRigidbody = null;
 
 	private Vector3 inputVelocity = Vector3.zero;
 
-	private bool isBraking;
+	private bool isBraking = false;
 
 	//In degrees/second (x = pitch, y = yaw, z = roll)
 	private Vector3 rotationVelocity = Vector3.zero;
@@ -85,7 +85,7 @@ public class PlayerController : NetworkBehaviour
 
 	private void Start()
 	{
-		playerRigidbody = GetComponent<Rigidbody>();
+		networkRigidbody = GetComponent<NetworkRigidbody>();
 
 		BrakeInput.action.performed += OnBrakeInputPerformed;
 		BrakeInput.action.canceled += OnBrakeInputCanceled;
@@ -109,7 +109,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		if (!IsOwner) { return; }
 
-		if (isBraking)
+		if (!isBraking)
 		{
 			inputVelocity = new Vector3(MoveInput.action.ReadValue<Vector2>().x, UpDownInput.action.ReadValue<float>(), MoveInput.action.ReadValue<Vector2>().y) * movementAcceleration;
 		}
@@ -142,7 +142,7 @@ public class PlayerController : NetworkBehaviour
 		transform.Rotate(Vector3.forward, rotationVelocity.z * Mathf.Deg2Rad);
 
 		//UI Stuff
-		velocityDisplay.text = string.Format("{0:0.##} M/S", playerRigidbody.linearVelocity.magnitude);
+		//velocityDisplay.text = string.Format("{0:0.##} M/S", playerRigidbody.linearVelocity.magnitude);
 	}
 
 	private void FixedUpdate()
@@ -152,18 +152,22 @@ public class PlayerController : NetworkBehaviour
 		if (isBraking)
 		{
 			//TODO Maybe use drag to brake?
-			inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(playerRigidbody.linearVelocity.normalized) * brakeAcceleration * Time.fixedDeltaTime, playerRigidbody.linearVelocity.magnitude);
+			//inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(playerRigidbody.linearVelocity.normalized) * brakeAcceleration * Time.fixedDeltaTime, playerRigidbody.linearVelocity.magnitude);
+			inputVelocity = Vector3.ClampMagnitude(-transform.InverseTransformDirection(networkRigidbody.GetLinearVelocity().normalized) * brakeAcceleration * Time.fixedDeltaTime, networkRigidbody.GetLinearVelocity().magnitude);
 		}
 		else
 		{
 			inputVelocity = inputVelocity * Time.fixedDeltaTime;
 		}
 
-		Vector3 NewVelocity = playerRigidbody.linearVelocity + transform.TransformDirection(inputVelocity);
+		Vector3 NewVelocity = networkRigidbody.GetLinearVelocity() + transform.TransformDirection(inputVelocity);
+
+		Debug.Log(NewVelocity);
 
 		if (NewVelocity.magnitude <= movementMaxVelocity)
 		{
-			playerRigidbody.linearVelocity = NewVelocity;
+			//playerRigidbody.linearVelocity = NewVelocity;
+			networkRigidbody.SetLinearVelocity(NewVelocity);
 		}
 	}
 }
