@@ -91,7 +91,7 @@ public class PlayerController : NetworkBehaviour
 
 		//Cursor.lockState = CursorLockMode.Locked;
 
-		//velocityDisplay = FindObjectOfType<UIVelocity>().GetComponent<TextMeshProUGUI>();
+		velocityDisplay = FindObjectOfType<UIVelocity>().GetComponent<TextMeshProUGUI>();
 	}
 
 	private void OnBrakeInputCanceled(InputAction.CallbackContext context)
@@ -121,12 +121,13 @@ public class PlayerController : NetworkBehaviour
 		if (RollInputValue != 0.0f)
 		{
 			NewRollVelocity += RollInputValue * keyboardRotationAcceleration * Time.deltaTime;
-			Debug.Log(NewRollVelocity);
 		}
 		else
 		{
 			NewRollVelocity -= Mathf.Clamp(keyboardRotationBrakeAcceleration * Time.deltaTime * Mathf.Sign(NewRollVelocity), NewRollVelocity * -Mathf.Sign(NewRollVelocity), NewRollVelocity * Mathf.Sign(NewRollVelocity));
 		}
+
+		Debug.Log(LookInput.action.ReadValue<Vector2>());
 
 		rotationVelocity.z = Mathf.Clamp(NewRollVelocity, -keyboardRotationMaxSpeed, keyboardRotationMaxSpeed);
 
@@ -141,7 +142,7 @@ public class PlayerController : NetworkBehaviour
 		transform.Rotate(Vector3.forward, rotationVelocity.z * Mathf.Deg2Rad);
 
 		//UI Stuff
-		//velocityDisplay.text = string.Format("{0:0.##} M/S", playerRigidbody.linearVelocity.magnitude);
+		velocityDisplay.text = string.Format("{0:0.##} M/S", rigidbody.linearVelocity.magnitude);
 	}
 
 	private void FixedUpdate()

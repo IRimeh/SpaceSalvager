@@ -445,10 +445,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   rigidbody: {fileID: 6678942100144651191}
-  mouseRotationPerUnit: 0.01
+  mouseRotationPerUnit: 0.001
   mouseRotationDrag: 3
-  keyboardRotationAcceleration: 3
-  keyboardRotationBrakeAcceleration: 6
+  keyboardRotationAcceleration: 4
+  keyboardRotationBrakeAcceleration: 8
   keyboardRotationMaxSpeed: 90
   movementAcceleration: 2.2
   brakeAcceleration: 8.7
