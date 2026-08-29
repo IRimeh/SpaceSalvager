@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System;
+using Unity.Mathematics;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -82,6 +83,10 @@ public class PlayerController : NetworkBehaviour
 		Cursor.lockState = CursorLockMode.Locked;
 
 		velocityDisplay = FindAnyObjectByType<UIVelocity>().GetComponent<TextMeshProUGUI>();
+
+		Vector2 spawnPoint = UnityEngine.Random.insideUnitCircle.normalized * 3;
+
+		transform.position = transform.position + new Vector3(spawnPoint.x, 0.0f, spawnPoint.y);
 	}
 
 	private void OnPrimaryInputPerformed(InputAction.CallbackContext context)

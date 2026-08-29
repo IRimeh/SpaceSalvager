@@ -795,7 +795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2237239715
+  GlobalObjectIdHash: 2810171957
   InScenePlacedSourceGlobalObjectIdHash: 2237239715
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -1280,8 +1280,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ToolGravitygun
   ShowTopMostFoldoutHeaderGroup: 1
   moveStrength: 10
-  minPushforce: 100
-  maxPushforce: 200
+  minPushforce: 5
+  maxPushforce: 10
   timeToMaxCharge: 2
   maxPushDistance: 10
   spherecastRadius: 1
