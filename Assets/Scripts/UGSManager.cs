@@ -8,6 +8,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using UnityEditor;
 using UnityEngine;
 
 public class UGSManager : MonoBehaviour
@@ -67,6 +68,7 @@ public class UGSManager : MonoBehaviour
 			// 4. Start Host
 			NetworkManager.Singleton.StartHost();
 			Debug.Log($"Lobby created! Room Join Code: {lobby.LobbyCode}");
+			GUIUtility.systemCopyBuffer = lobby.LobbyCode;
 
 			// Update UI status with the lobby code
 			FindObjectOfType<LobbyUIController>()?.UpdateStatus($"Lobby Created! Code: {lobby.LobbyCode}");

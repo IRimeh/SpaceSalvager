@@ -755,9 +755,10 @@ GameObject:
   - component: {fileID: 5252025604001088696}
   - component: {fileID: 6678942100144651191}
   - component: {fileID: 8944577373181571966}
-  - component: {fileID: 1286539779979537686}
-  - component: {fileID: 5172263614130752759}
   - component: {fileID: 7297539327766983780}
+  - component: {fileID: 2917208891429573269}
+  - component: {fileID: -3265943913050353410}
+  - component: {fileID: -7704920800298463557}
   m_Layer: 0
   m_Name: pfb_player
   m_TagString: Untagged
@@ -794,14 +795,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2810171957
+  GlobalObjectIdHash: 2237239715
   InScenePlacedSourceGlobalObjectIdHash: 2237239715
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
-  Ownership: 1
+  Ownership: 2
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 1
+  m_InScenePlaced: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -890,7 +891,23 @@ MonoBehaviour:
   SecondaryInput: {fileID: 8593751504944708428, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   tools:
   - {fileID: 8621768181587332150}
---- !u!114 &1286539779979537686
+--- !u!114 &7297539327766983780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604564021314646404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3077436472a1e44fa3602f8c22ff90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnableIfOwner
+  ShowTopMostFoldoutHeaderGroup: 1
+  _toEnable:
+  - {fileID: 2177917341451228949}
+  _invert: 0
+--- !u!114 &2917208891429573269
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -936,7 +953,7 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &5172263614130752759
+--- !u!114 &-3265943913050353410
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -953,7 +970,7 @@ MonoBehaviour:
   UseRigidBodyForMotion: 1
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &7297539327766983780
+--- !u!114 &-7704920800298463557
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -962,13 +979,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6604564021314646404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3077436472a1e44fa3602f8c22ff90f, type: 3}
+  m_Script: {fileID: 11500000, guid: cd4e62c6f838f82499008066d5563093, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnableIfOwner
+  m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
-  _toEnable:
-  - {fileID: 2177917341451228949}
-  _invert: 0
 --- !u!1 &7699478827763533000
 GameObject:
   m_ObjectHideFlags: 0
