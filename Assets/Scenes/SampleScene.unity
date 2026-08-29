@@ -493,6 +493,74 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1001 &617796812
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.5352907
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.3806634
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.226846
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171255123352787407, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557304647632140256, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557304647632140256, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3601842512
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604564021314646404, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      propertyPath: m_Name
+      value: pfb_player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8166969225983411831, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1766388129}
+  m_SourcePrefab: {fileID: 100100000, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
 --- !u!1 &769243321
 GameObject:
   m_ObjectHideFlags: 0
@@ -2366,6 +2434,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1766388127 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8166969225983411831, guid: 99fe69a76878a944f9fa5ba04581cc05, type: 3}
+  m_PrefabInstance: {fileID: 617796812}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1766388129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766388127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b289bcdcd8941c34bb2111942fa8d379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  moveStrength: 0
 --- !u!1001 &3000589729804564175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2434,6 +2521,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Host/JoinUI
       objectReference: {fileID: 0}
+    - target: {fileID: 7982510810728150508, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8334938948221339138, guid: 5427a91706915cc42bd3a955c4597780, type: 3}
       propertyPath: ugsManager
       value: 
@@ -2461,3 +2552,4 @@ SceneRoots:
   - {fileID: 1459425628}
   - {fileID: 3000589729804564175}
   - {fileID: 1753940150}
+  - {fileID: 617796812}
