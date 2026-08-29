@@ -1,7 +1,10 @@
 using UnityEngine;
 using Unity.Netcode;
 
-public class Tool : NetworkBehaviour
+public abstract class Tool : NetworkBehaviour
 {
-	
+	public abstract void PressPrimary();
+	public abstract void ReleasePrimary();
+	public abstract void PressSecondary();
+	public abstract void ReleaseSecondary();
 }

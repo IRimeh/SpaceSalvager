@@ -1,7 +1,10 @@
+using NUnit.Framework;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using System;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -51,6 +54,16 @@ public class PlayerController : NetworkBehaviour
 	[SerializeField]
 	InputActionReference BrakeInput;
 
+	[SerializeField]
+	InputActionReference PrimaryInput;
+
+	[SerializeField]
+	InputActionReference SecondaryInput;
+
+	[SerializeField]
+	private List<Tool> tools = new List<Tool>();
+	private int currentTool = 0;
+
 	protected override void OnNetworkPostSpawn()
 	{
 		if (!IsOwner)
@@ -61,10 +74,34 @@ public class PlayerController : NetworkBehaviour
 		
 		BrakeInput.action.performed += OnBrakeInputPerformed;
 		BrakeInput.action.canceled += OnBrakeInputCanceled;
+		PrimaryInput.action.performed += OnPrimaryInputPerformed;
+		PrimaryInput.action.canceled += OnPrimaryInputCanceled;
+		SecondaryInput.action.performed += OnSecondaryInputPerformed;
+		SecondaryInput.action.canceled += OnSecondaryInputCanceled;
 
 		Cursor.lockState = CursorLockMode.Locked;
 
-		velocityDisplay = FindObjectOfType<UIVelocity>().GetComponent<TextMeshProUGUI>();
+		velocityDisplay = FindAnyObjectByType<UIVelocity>().GetComponent<TextMeshProUGUI>();
+	}
+
+	private void OnPrimaryInputPerformed(InputAction.CallbackContext context)
+	{
+		tools[currentTool].PressPrimary();
+	}
+
+	private void OnPrimaryInputCanceled(InputAction.CallbackContext context)
+	{
+		tools[currentTool].ReleasePrimary();
+	}
+
+	private void OnSecondaryInputPerformed(InputAction.CallbackContext context)
+	{
+		tools[currentTool].PressSecondary();
+	}
+
+	private void OnSecondaryInputCanceled(InputAction.CallbackContext context)
+	{
+		tools[currentTool].ReleaseSecondary();
 	}
 
 	public override void OnNetworkDespawn()
