@@ -175,7 +175,7 @@ public class PredictedPlayerController : NetworkBehaviour
 				rpcTimer += Time.fixedDeltaTime;
 				if (rpcTimer >= RpcSendInterval)
 				{
-					SendInputServerRpc(currentThrustInput, isBraking, transform.rotation);
+					SendInputServerRpc(currentThrustInput, isBraking, rigidbody.rotation);
 					rpcTimer = 0.0f;
 				}
 
@@ -185,21 +185,21 @@ public class PredictedPlayerController : NetworkBehaviour
 		}
 		else if (IsServer)
 		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, latestServerRotation, 15f * Time.fixedDeltaTime);
+			rigidbody.rotation = Quaternion.Slerp(rigidbody.rotation, latestServerRotation, 15f * Time.fixedDeltaTime);
 
 			ApplyPhysicsLogic(latestServerThrust, latestServerBraking);
 		}
 		else
 		{
 			rigidbody.position = Vector3.Lerp(rigidbody.position, serverPosition.Value, 15f * Time.fixedDeltaTime);
-			transform.rotation = Quaternion.Slerp(transform.rotation, serverRotation.Value, 15f * Time.fixedDeltaTime);
+			rigidbody.rotation = Quaternion.Slerp(rigidbody.rotation, serverRotation.Value, 15f * Time.fixedDeltaTime);
 			rigidbody.linearVelocity = serverLinearVelocity.Value;
 		}
 
 		if (IsServer)
 		{
 			serverPosition.Value = rigidbody.position;
-			serverRotation.Value = transform.rotation;
+			serverRotation.Value = rigidbody.rotation;
 			serverLinearVelocity.Value = rigidbody.linearVelocity;
 		}
 	}
