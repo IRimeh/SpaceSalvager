@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -15,6 +16,8 @@ public class UGSManager : MonoBehaviour
 {
 	private const string KEY_RELAY_CODE = "RelayJoinCode";
 	private string currentLobbyId;
+
+	public static event Action OnConnect = delegate { };
 
 	private async void Start()
 	{
@@ -67,6 +70,7 @@ public class UGSManager : MonoBehaviour
 
 			// 4. Start Host
 			NetworkManager.Singleton.StartHost();
+			OnConnect.Invoke();
 			Debug.Log($"Lobby created! Room Join Code: {lobby.LobbyCode}");
 			GUIUtility.systemCopyBuffer = lobby.LobbyCode;
 
@@ -104,6 +108,7 @@ public class UGSManager : MonoBehaviour
 
 			// 4. Start Client
 			NetworkManager.Singleton.StartClient();
+			OnConnect.Invoke();
 		}
 		catch (LobbyServiceException e)
 		{
