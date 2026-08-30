@@ -20,13 +20,16 @@ public class VisualDecoupler : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		transform.SetPositionAndRotation(Vector3.SmoothDamp(
+		transform.position = Vector3.SmoothDamp(
 			transform.position,
 			networkRoot.position,
 			ref positionVelocity,
-			smoothTime), Quaternion.Slerp(
+			smoothTime);
+
+		// 3. Smoothly chase the rotation
+		transform.rotation = Quaternion.Slerp(
 			transform.rotation,
 			networkRoot.rotation,
-			Time.deltaTime * rotationLerpSpeed));
+			Time.deltaTime * rotationLerpSpeed);
 	}
 }

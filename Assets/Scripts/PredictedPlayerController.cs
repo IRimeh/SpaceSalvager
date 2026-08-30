@@ -69,6 +69,9 @@ public class PredictedPlayerController : NetworkBehaviour
 	private bool latestServerBraking = false;
 	private Quaternion latestServerRotation = Quaternion.identity;
 
+	private float rpcTimer = 0f;
+	private const float RpcSendInterval = 0.05f;
+
 
 	private void OnPrimaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressPrimary();
 	private void OnPrimaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleasePrimary();
@@ -169,7 +172,12 @@ public class PredictedPlayerController : NetworkBehaviour
 
 			if (!IsServer)
 			{
-				SendInputServerRpc(currentThrustInput, isBraking, transform.rotation);
+				rpcTimer += Time.fixedDeltaTime;
+				if (rpcTimer >= RpcSendInterval)
+				{
+					SendInputServerRpc(currentThrustInput, isBraking, transform.rotation);
+					rpcTimer = 0.0f;
+				}
 
 				rigidbody.position = Vector3.Lerp(rigidbody.position, serverPosition.Value, 0.1f);
 				rigidbody.linearVelocity = Vector3.Lerp(rigidbody.linearVelocity, serverLinearVelocity.Value, 0.1f);
@@ -196,7 +204,7 @@ public class PredictedPlayerController : NetworkBehaviour
 		}
 	}
 
-	[ServerRpc]
+	[Rpc(SendTo.Server)]
 	private void SendInputServerRpc(Vector3 thrustInput, bool braking, Quaternion clientRotation)
 	{
 		latestServerThrust = thrustInput;
@@ -221,6 +229,11 @@ public class PredictedPlayerController : NetworkBehaviour
 
 		if (NewVelocity.magnitude <= movementMaxVelocity)
 		{
+			if (rigidbody.IsSleeping())
+			{
+				rigidbody.WakeUp();
+			}
+
 			rigidbody.linearVelocity = NewVelocity;
 		}
 	}
