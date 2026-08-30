@@ -66,7 +66,6 @@ public class ToolGravitygun : Tool
 				if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject) {
 					Vector3 EvaluatedPushForce = playerCamera.forward * PushForce * pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance));
 					Debug.Log(hit.distance + " / " + " / " + NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance) + " / " + pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance)) + " / " + EvaluatedPushForce.magnitude);
-					//hit.rigidbody.AddForce(EvaluatedPushForce);
 					hit.rigidbody.AddForceAtPosition(EvaluatedPushForce, hit.point, ForceMode.Impulse);
 				}
 			}

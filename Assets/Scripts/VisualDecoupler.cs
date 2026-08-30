@@ -20,8 +20,6 @@ public class VisualDecoupler : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		//What if root is destroyed?
-		
 		transform.SetPositionAndRotation(Vector3.SmoothDamp(
 			transform.position,
 			networkRoot.position,
@@ -31,6 +29,4 @@ public class VisualDecoupler : MonoBehaviour
 			networkRoot.rotation,
 			Time.deltaTime * rotationLerpSpeed));
 	}
-
-	
 }

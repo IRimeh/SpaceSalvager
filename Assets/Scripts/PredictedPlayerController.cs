@@ -183,13 +183,11 @@ public class PredictedPlayerController : NetworkBehaviour
 		}
 		else
 		{
-			// 5. Remote Client Proxies (Player 2 watching Player 1)
-			rigidbody.position = serverPosition.Value;
-			transform.rotation = serverRotation.Value;
+			rigidbody.position = Vector3.Lerp(rigidbody.position, serverPosition.Value, 15f * Time.fixedDeltaTime);
+			transform.rotation = Quaternion.Slerp(transform.rotation, serverRotation.Value, 15f * Time.fixedDeltaTime);
 			rigidbody.linearVelocity = serverLinearVelocity.Value;
 		}
 
-		// 6. Server broadcasts absolute truth
 		if (IsServer)
 		{
 			serverPosition.Value = rigidbody.position;
