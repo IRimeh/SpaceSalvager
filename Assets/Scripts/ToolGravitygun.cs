@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Rendering;
@@ -27,10 +28,11 @@ public class ToolGravitygun : Tool
 
 	private bool isHolding;
 	private bool isCharging;
-
 	private float currentCharge;
-
 	private Transform playerCamera;
+
+	public float CurrentCharge01 => Mathf.Clamp01(currentCharge / timeToMaxCharge);
+	public event Action<float> OnShootEvent = delegate { };
 
 	protected override void OnNetworkPostSpawn() 
 	{
@@ -57,23 +59,27 @@ public class ToolGravitygun : Tool
 	{
 		isCharging = false;
 
-		float PushForce = ((maxPushforce - minPushforce) * Mathf.Clamp01(currentCharge / timeToMaxCharge)) + minPushforce;
+		float PushForce = ((maxPushforce - minPushforce) * CurrentCharge01) + minPushforce;
 
 		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, spherecastRadius, playerCamera.forward, maxPushDistance);
 
-		if (hits.Length != 0) {
-			foreach (RaycastHit hit in hits) {
-				if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject) {
-					Vector3 EvaluatedPushForce = playerCamera.forward * PushForce * pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance));
-					Debug.Log(hit.distance + " / " + " / " + NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance) + " / " + pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance)) + " / " + EvaluatedPushForce.magnitude);
+		foreach (RaycastHit hit in hits) 
+		{
+			if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject) 
+			{
+				Vector3 EvaluatedPushForce = playerCamera.forward * PushForce * pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance));
+				Debug.Log(hit.distance + " / " + " / " + NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance) + " / " + pushFalloff.Evaluate(NormalizeAndClamp(hit.distance, 0.0f, maxPushDistance)) + " / " + EvaluatedPushForce.magnitude);
 
-					if (hit.transform.TryGetComponent<NetworkObject>(out NetworkObject targetObjects)) {
+					if (hit.transform.TryGetComponent<NetworkObject>(out NetworkObject targetObjects))
 						ApplyPushForceServerRpc(targetObjects.NetworkObjectId, EvaluatedPushForce, hit.point);
-					}
-					//hit.rigidbody.AddForceAtPosition(EvaluatedPushForce, hit.point, ForceMode.Impulse);
-				}
 			}
+
+			if (hit.transform.TryGetComponent(out InteractableView interactableView))
+				interactableView.ShowEffectForTime(5.0f);
 		}
+
+		OnShootEvent.Invoke(CurrentCharge01);
+		currentCharge = 0;
 	}
 
 	private void Update()
