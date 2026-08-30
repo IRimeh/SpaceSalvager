@@ -214,6 +214,7 @@ public class PredictedPlayerController : NetworkBehaviour
 
 	private void ApplyPhysicsLogic(Vector3 thrustInput, bool braking)
 	{
+		//TODO Player cannot barke or move at all when over max speed.
 		Vector3 appliedVelocity;
 
 		if (braking)
