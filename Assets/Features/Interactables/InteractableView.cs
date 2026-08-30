@@ -45,10 +45,15 @@ public class InteractableView : MonoBehaviour
 			_interactable.SetIsBeingHeldRpc(false);
 	}
 
+	public void ShowEffectForTime(float time)
+	{
+		_currentTime = time;
+		_interactable.SetIsBeingHeldRpc(true);
+	}
+
 	private void OnCollisionEnter(Collision other)
 	{
-		_currentTime = _effectOnCollisionTime;
-		_interactable.SetIsBeingHeldRpc(true);
+		ShowEffectForTime(_effectOnCollisionTime);
 	}
 
 	private void OnIsBeingHeldChanged(bool previousvalue, bool isHeld)
