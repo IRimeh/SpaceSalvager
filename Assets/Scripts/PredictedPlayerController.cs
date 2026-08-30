@@ -214,7 +214,6 @@ public class PredictedPlayerController : NetworkBehaviour
 
 	private void ApplyPhysicsLogic(Vector3 thrustInput, bool braking)
 	{
-		//TODO Player cannot barke or move at all when over max speed.
 		Vector3 appliedVelocity;
 
 		if (braking)
@@ -226,16 +225,26 @@ public class PredictedPlayerController : NetworkBehaviour
 			appliedVelocity = thrustInput * Time.fixedDeltaTime;
 		}
 
-		Vector3 NewVelocity = rigidbody.linearVelocity + transform.TransformDirection(appliedVelocity);
+		Vector3 newVelocity = rigidbody.linearVelocity + transform.TransformDirection(appliedVelocity);
 
-		if (NewVelocity.magnitude <= movementMaxVelocity)
+		// Get the player's current speed
+		float currentSpeed = rigidbody.linearVelocity.magnitude;
+
+		// The maximum allowed speed is either the default max, or the current over-max speed
+		float maxAllowedSpeed = Mathf.Max(movementMaxVelocity, currentSpeed);
+
+		// Clamp the new velocity so the player cannot accelerate past maxAllowedSpeed,
+		// but they CAN still brake (lowering magnitude) and steer (changing direction).
+		if (newVelocity.magnitude > maxAllowedSpeed)
 		{
-			if (rigidbody.IsSleeping())
-			{
-				rigidbody.WakeUp();
-			}
-
-			rigidbody.linearVelocity = NewVelocity;
+			newVelocity = Vector3.ClampMagnitude(newVelocity, maxAllowedSpeed);
 		}
+
+		if (rigidbody.IsSleeping())
+		{
+			rigidbody.WakeUp();
+		}
+
+		rigidbody.linearVelocity = newVelocity;
 	}
 }
