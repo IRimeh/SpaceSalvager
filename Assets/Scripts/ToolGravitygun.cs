@@ -1,6 +1,7 @@
 using System;
-using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 public class ToolGravitygun : Tool
@@ -21,14 +22,34 @@ public class ToolGravitygun : Tool
 	private float maxPushDistance = 10.0f;
 
 	[SerializeField]
-	private float spherecastRadius = 1.0f;
+	private float maxGrabDistance = 10.0f;
+
+	[SerializeField]
+	private float pushSpherecastRadius = 1.0f;
+
+	[SerializeField]
+	private float grabSpherecastRadius = 0.25f;
 
 	[SerializeField]
 	private AnimationCurve pushFalloff = new();
 
+
+	[SerializeField]
+	private float arrivalThreshold = 0.1f;
+
+	[SerializeField]
+	private float slowingRadius = 3.0f;
+
+	[SerializeField]
+	private float maxSpeed = 20.0f;
+
+	[SerializeField]
+	private Transform grabPoint;
+
 	private bool isHolding;
 	private bool isCharging;
 	private float currentCharge;
+	private Rigidbody grabbedRigidbody;
 	private Transform playerCamera;
 
 	public float CurrentCharge01 => Mathf.Clamp01(currentCharge / timeToMaxCharge);
@@ -36,21 +57,52 @@ public class ToolGravitygun : Tool
 
 	protected override void OnNetworkPostSpawn()
 	{
+		if (!IsOwner) return;
+
 		playerCamera = transform.parent.parent;
 	}
 
 	public override void PressPrimary()
 	{
-		isHolding = true;
+		if (!IsOwner) return;
+
+		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, grabSpherecastRadius, playerCamera.forward, maxGrabDistance);
+
+		Array.Sort(hits, delegate (RaycastHit x, RaycastHit y) { return x.distance.CompareTo(y.distance); });
+
+		foreach (RaycastHit hit in hits)
+		{
+			if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject)
+			{
+				grabbedRigidbody = hit.rigidbody;
+				isHolding = true;
+				if (grabbedRigidbody.TryGetComponent<Interactable>(out Interactable interactable)) {
+					interactable.SetIsBeingHeldServerRpc(true);
+				}
+				break;
+			}
+		}
 	}
 
 	public override void ReleasePrimary()
 	{
-		isHolding = false;
+		if (!IsOwner) return;
+
+		if (isHolding) {
+			if (grabbedRigidbody.TryGetComponent<Interactable>(out Interactable interactable))
+			{
+				interactable.SetIsBeingHeldServerRpc(false);
+			}
+
+			isHolding = false;
+			grabbedRigidbody = null;
+		}
 	}
 
 	public override void PressSecondary()
 	{
+		if (!IsOwner) return;
+
 		isCharging = true;
 		currentCharge = 0.0f;
 	}
@@ -63,7 +115,7 @@ public class ToolGravitygun : Tool
 
 		float PushForce = ((maxPushforce - minPushforce) * CurrentCharge01) + minPushforce;
 
-		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, spherecastRadius, playerCamera.forward, maxPushDistance);
+		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, pushSpherecastRadius, playerCamera.forward, maxPushDistance);
 
 		foreach (RaycastHit hit in hits)
 		{
@@ -77,7 +129,7 @@ public class ToolGravitygun : Tool
 			}
 
 			if (hit.transform.TryGetComponent(out InteractableView interactableView))
-				interactableView.ShowEffectForTime(5.0f);
+				interactableView.ShowEffectForTime(2.0f);
 		}
 
 		PlaySecondaryShootEffectEveryoneRpc();
@@ -90,6 +142,41 @@ public class ToolGravitygun : Tool
 
 		if (isCharging) {
 			currentCharge += Time.deltaTime;
+		}
+	}
+
+	private void FixedUpdate()
+	{
+		if (!IsOwner) return;
+
+		if (isHolding) {
+			if (grabbedRigidbody.TryGetComponent<NetworkObject>(out NetworkObject targetObject)) {
+				Vector3 ToTarget = grabPoint.position - grabbedRigidbody.position;
+
+				float Distance = ToTarget.magnitude;
+
+				//TODO This could make problems e.g. Lock the object (maybe only call once?)
+				//if (Distance < arrivalThreshold) {
+				//	SetGrabbedObjectVelocityServerRpc(targetObject.NetworkObjectId, Vector3.zero);
+				//	return;
+				//}
+
+				Vector3 Direction = ToTarget.normalized;
+
+				float Speed = maxSpeed;
+
+				if (Distance < slowingRadius) {
+					float t = Distance / slowingRadius;
+					Speed = maxSpeed * (t * t);
+				}
+
+				Vector3 DesiredVelocity = Direction * Speed;
+
+				Vector3 Steering = DesiredVelocity - grabbedRigidbody.linearVelocity;
+				Steering = Vector3.ClampMagnitude(Steering, moveStrength);
+
+				ApplyGrabForceServerRpc(targetObject.NetworkObjectId, Steering);
+			}
 		}
 	}
 
@@ -113,6 +200,28 @@ public class ToolGravitygun : Tool
 		if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(targetNetworkObject, out NetworkObject targetObject)) {
 			if (targetObject.TryGetComponent<Rigidbody>(out Rigidbody targetRigidbody)) {
 				targetRigidbody.AddForceAtPosition(linearForce, forcePosition, ForceMode.Impulse);
+			}
+		}
+	}
+
+	[Rpc(SendTo.Server)]
+	private void ApplyGrabForceServerRpc(ulong targetNetworkObject, Vector3 linearForce) {
+		if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(targetNetworkObject, out NetworkObject targetObject))
+		{
+			if (targetObject.TryGetComponent<Rigidbody>(out Rigidbody targetRigidbody))
+			{
+				targetRigidbody.AddForce(linearForce, ForceMode.Force);
+			}
+		}
+	}
+
+	[Rpc(SendTo.Server)]
+	private void SetGrabbedObjectVelocityServerRpc(ulong targetNetworkObject, Vector3 velocity) {
+		if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(targetNetworkObject, out NetworkObject targetObject))
+		{
+			if (targetObject.TryGetComponent<Rigidbody>(out Rigidbody targetRigidbody))
+			{
+				targetRigidbody.linearVelocity = velocity;
 			}
 		}
 	}

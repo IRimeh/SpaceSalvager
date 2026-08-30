@@ -25413,6 +25413,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabPoint
+      value: 
+      objectReference: {fileID: 8968033773557934240}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: moveStrength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: slowingRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: grabFalloff.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5494750420628221225, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: m_Name
       value: tool_gravitygun

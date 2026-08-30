@@ -42,13 +42,13 @@ public class InteractableView : MonoBehaviour
 
 		_currentTime -= Time.deltaTime;
 		if(_currentTime <= 0)
-			_interactable.SetIsBeingHeldRpc(false);
+			_interactable.SetIsBeingHeldServerRpc(false);
 	}
 
 	public void ShowEffectForTime(float time)
 	{
 		_currentTime = time;
-		_interactable.SetIsBeingHeldRpc(true);
+		_interactable.SetIsBeingHeldServerRpc(true);
 	}
 
 	private void OnCollisionEnter(Collision other)
