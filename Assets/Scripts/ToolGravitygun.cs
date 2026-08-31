@@ -68,18 +68,26 @@ public class ToolGravitygun : Tool
 
 		if (TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider))
 		{
-			grabbedRigidbody = rigidbody;
-			interactable.SetIsBeingHeldServerRpc(true);
-			isHolding = true;
-			GameCursor.SetCursorIsInteracting();
-			//TODO This is a test code piece that removes the shippart from the grid;
 			if (collider.TryGetComponent(out SpaceshipPart spaceshipPart))
 			{
+				//TODO THIS IS TEMP WEE WWOOOOO
 				spaceshipPart.SeverPartFromAll();
+				if(TryGetFirstHitInteractable(out interactable, out rigidbody, out collider))
+					StartHolding(rigidbody, interactable);
 			}
-			//TODO This is a test code piece that removes the shippart from the grid;
-
+			else
+			{
+				StartHolding(rigidbody, interactable);
+			}
 		}
+	}
+
+	private void StartHolding(Rigidbody rigidbody, Interactable interactable)
+	{
+		grabbedRigidbody = rigidbody;
+		interactable.SetIsBeingHeldServerRpc(true);
+		isHolding = true;
+		GameCursor.SetCursorIsInteracting();
 	}
 
 	public override void ReleasePrimary()
