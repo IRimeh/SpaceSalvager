@@ -66,14 +66,14 @@ public class ToolGravitygun : Tool
 	{
 		if (!IsOwner) return;
 
-		if (TryGetFirstHitInteractable(out Interactable interactable))
+		if (TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider))
 		{
-			grabbedRigidbody = interactable.GetComponent<Rigidbody>();
+			grabbedRigidbody = rigidbody;
 			interactable.SetIsBeingHeldServerRpc(true);
 			isHolding = true;
 			GameCursor.SetCursorIsInteracting();
 			//TODO This is a test code piece that removes the shippart from the grid;
-			if (interactable.TryGetComponent(out SpaceshipPart spaceshipPart))
+			if (collider.TryGetComponent(out SpaceshipPart spaceshipPart))
 			{
 				spaceshipPart.SeverPartFromAll();
 			}
@@ -132,9 +132,11 @@ public class ToolGravitygun : Tool
 		currentCharge = 0;
 	}
 
-	private bool TryGetFirstHitInteractable(out Interactable interactable)
+	private bool TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider)
 	{
 		interactable = null;
+		rigidbody = null;
+		collider = null;
 		bool hitInteractable = false;
 		
 		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, grabSpherecastRadius, playerCamera.forward, maxGrabDistance);
@@ -143,10 +145,12 @@ public class ToolGravitygun : Tool
 		{
 			if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject)
 			{
-				if (!hit.rigidbody.TryGetComponent(out Interactable rbInteractable))
+				if (!hit.collider.TryGetComponent(out Interactable rbInteractable))
 					continue;
-				
+
 				interactable = rbInteractable;
+				rigidbody = hit.rigidbody;
+				collider = hit.collider;
 				hitInteractable = true;
 				break;
 			}
@@ -178,7 +182,7 @@ public class ToolGravitygun : Tool
 		if (isHolding || isCharging)
 			return;
 
-		bool shouldShowInteractableCursor = TryGetFirstHitInteractable(out _);
+		bool shouldShowInteractableCursor = TryGetFirstHitInteractable(out _, out _, out _);
 		if(shouldShowInteractableCursor)
 			GameCursor.SetCursorCanInteract();
 		else
