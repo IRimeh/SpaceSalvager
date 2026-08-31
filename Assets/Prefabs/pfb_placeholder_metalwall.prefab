@@ -116,7 +116,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   SpaceshipPartId: 0
   connectedParts: []
-  PartMass: 10
+  PartMass: 5
 --- !u!114 &7570187247525341830
 MonoBehaviour:
   m_ObjectHideFlags: 0
