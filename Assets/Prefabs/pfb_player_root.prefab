@@ -145,15 +145,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679307876633721650}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.64, y: -0.45, z: 0.09}
+  m_LocalRotation: {x: 0, y: -0.052335896, z: 0, w: 0.9986295}
+  m_LocalPosition: {x: 0.64, y: -0.45, z: 0.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2613431430060334249}
   - {fileID: 5410237910799704090}
   m_Father: {fileID: 8624936713404444654}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -6, z: 0}
 --- !u!1 &4321722421969848463
 GameObject:
   m_ObjectHideFlags: 0
@@ -15193,7 +15193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1500442710
+  GlobalObjectIdHash: 3499476048
   InScenePlacedSourceGlobalObjectIdHash: 3499476048
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -15338,16 +15338,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableView
   _interactable: {fileID: 1473980114310111369}
-  _meshRenderer: {fileID: 1873706963337583127}
+  _sourceMeshFilter: {fileID: 2200211553090878180}
   _targetFilter: {fileID: 1979444954488360769}
+  _outlineMeshRenderers:
+  - {fileID: 1873706963337583127}
+  - {fileID: 2415903438863035978}
+  - {fileID: 5206325890471740539}
   _particleSystem: {fileID: 2196121682138965604}
-  _meshFilters:
-  - {fileID: 2200211553090878180}
-  - {fileID: 7454595404996824216}
-  - {fileID: 9038885189844923873}
   _outlineLayerIndex: 1
   _scaleSpeed: 0.25
-  _effectOnCollisionTime: 5
 --- !u!1 &7672001629382869390
 GameObject:
   m_ObjectHideFlags: 0

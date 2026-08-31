@@ -66,46 +66,33 @@ public class ToolGravitygun : Tool
 	{
 		if (!IsOwner) return;
 
-		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, grabSpherecastRadius, playerCamera.forward, maxGrabDistance);
-
-		Array.Sort(hits, delegate (RaycastHit x, RaycastHit y) { return x.distance.CompareTo(y.distance); });
-
-		foreach (RaycastHit hit in hits)
+		if (TryGetFirstHitInteractable(out Interactable interactable))
 		{
-			if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject)
+			grabbedRigidbody = interactable.GetComponent<Rigidbody>();
+			interactable.SetIsBeingHeldServerRpc(true);
+			isHolding = true;
+			GameCursor.SetCursorIsInteracting();
+			//TODO This is a test code piece that removes the shippart from the grid;
+			if (interactable.TryGetComponent(out SpaceshipPart spaceshipPart))
 			{
-				grabbedRigidbody = hit.rigidbody;
-				isHolding = true;
-
-				//TODO This is a test code piece that removes the shippart from the grid;
-				if (hit.collider.TryGetComponent(out SpaceshipPart spaceshipPart))
-				{
-					spaceshipPart.SeverPartFromAll();
-				}
-				//TODO This is a test code piece that removes the shippart from the grid;
-
-				if (grabbedRigidbody.TryGetComponent<Interactable>(out Interactable interactable)) {
-					interactable.SetIsBeingHeldServerRpc(true);
-				}
-
-				break;
+				spaceshipPart.SeverPartFromAll();
 			}
+			//TODO This is a test code piece that removes the shippart from the grid;
+
 		}
 	}
 
 	public override void ReleasePrimary()
 	{
 		if (!IsOwner) return;
+		if (!isHolding) return;
+		
+		if (grabbedRigidbody.TryGetComponent(out Interactable interactable))
+			interactable.SetIsBeingHeldServerRpc(false);
 
-		if (isHolding) {
-			if (grabbedRigidbody.TryGetComponent<Interactable>(out Interactable interactable))
-			{
-				interactable.SetIsBeingHeldServerRpc(false);
-			}
-
-			isHolding = false;
-			grabbedRigidbody = null;
-		}
+		isHolding = false;
+		grabbedRigidbody = null;
+		GameCursor.SetCursorDefault();
 	}
 
 	public override void PressSecondary()
@@ -145,11 +132,34 @@ public class ToolGravitygun : Tool
 		currentCharge = 0;
 	}
 
+	private bool TryGetFirstHitInteractable(out Interactable interactable)
+	{
+		interactable = null;
+		bool hitInteractable = false;
+		
+		RaycastHit[] hits = Physics.SphereCastAll(playerCamera.position, grabSpherecastRadius, playerCamera.forward, maxGrabDistance);
+		Array.Sort(hits, delegate (RaycastHit x, RaycastHit y) { return x.distance.CompareTo(y.distance); });
+		foreach (RaycastHit hit in hits)
+		{
+			if (hit.rigidbody != null && hit.transform.gameObject != this.NetworkObject.transform.gameObject)
+			{
+				if (!hit.rigidbody.TryGetComponent(out Interactable rbInteractable))
+					continue;
+				
+				interactable = rbInteractable;
+				hitInteractable = true;
+			}
+		}
+
+		return hitInteractable;
+	}
+
 	private void Update()
 	{
 		if (!IsOwner) return;
 
-		if (isCharging) {
+		if (isCharging) 
+		{
 			currentCharge += Time.deltaTime;
 		}
 	}
@@ -158,35 +168,49 @@ public class ToolGravitygun : Tool
 	{
 		if (!IsOwner) return;
 
-		if (isHolding) {
-			if (grabbedRigidbody.TryGetComponent<NetworkObject>(out NetworkObject targetObject)) {
-				Vector3 ToTarget = grabPoint.position - grabbedRigidbody.position;
+		ShowInteractable();
+		MoveHeldInteractable();
+	}
 
-				float Distance = ToTarget.magnitude;
+	private void ShowInteractable()
+	{
+		if (isHolding || isCharging)
+			return;
 
-				//TODO This could make problems e.g. Lock the object (maybe only call once?)
-				//if (Distance < arrivalThreshold) {
-				//	SetGrabbedObjectVelocityServerRpc(targetObject.NetworkObjectId, Vector3.zero);
-				//	return;
-				//}
+		bool shouldShowInteractableCursor = TryGetFirstHitInteractable(out _);
+		if(shouldShowInteractableCursor)
+			GameCursor.SetCursorCanInteract();
+		else
+			GameCursor.SetCursorDefault();
+	}
 
-				Vector3 Direction = ToTarget.normalized;
+	private void MoveHeldInteractable()
+	{
+		if (!isHolding) return;
+		if (!grabbedRigidbody.TryGetComponent(out NetworkObject targetObject)) return;
+		
+		Vector3 ToTarget = grabPoint.position - grabbedRigidbody.position;
+		float Distance = ToTarget.magnitude;
 
-				float Speed = maxSpeed;
+		//TODO This could make problems e.g. Lock the object (maybe only call once?)
+		//if (Distance < arrivalThreshold) {
+		//	SetGrabbedObjectVelocityServerRpc(targetObject.NetworkObjectId, Vector3.zero);
+		//	return;
+		//}
 
-				if (Distance < slowingRadius) {
-					float t = Distance / slowingRadius;
-					Speed = maxSpeed * (t * t);
-				}
-
-				Vector3 DesiredVelocity = Direction * Speed;
-
-				Vector3 Steering = DesiredVelocity - grabbedRigidbody.linearVelocity;
-				Steering = Vector3.ClampMagnitude(Steering, moveStrength);
-
-				ApplyGrabForceServerRpc(targetObject.NetworkObjectId, Steering);
-			}
+		Vector3 Direction = ToTarget.normalized;
+		float Speed = maxSpeed;
+		if (Distance < slowingRadius) 
+		{
+			float t = Distance / slowingRadius;
+			Speed = maxSpeed * (t * t);
 		}
+
+		Vector3 DesiredVelocity = Direction * Speed;
+		Vector3 Steering = DesiredVelocity - grabbedRigidbody.linearVelocity;
+		Steering = Vector3.ClampMagnitude(Steering, moveStrength);
+
+		ApplyGrabForceServerRpc(targetObject.NetworkObjectId, Steering);
 	}
 
 	public static float NormalizeAndClamp(float value, float min, float max)
