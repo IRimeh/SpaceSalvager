@@ -26,11 +26,18 @@ public class InteractableView : MonoBehaviour
 		CopyMeshes();
 		
 		_interactable.IsBeingHeld.OnValueChanged += OnIsBeingHeldChanged;
+		_interactable.OnStartHolding += StopTimer;
 	}
 
 	private void OnDestroy()
 	{
 		_interactable.IsBeingHeld.OnValueChanged -= OnIsBeingHeldChanged;
+		_interactable.OnStartHolding -= StopTimer;
+	}
+	
+	private void StopTimer()
+	{
+		_currentTime = -1;
 	}
 
 	private void OnIsBeingHeldChanged(bool previousvalue, bool isHeld)
