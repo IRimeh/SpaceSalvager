@@ -16,6 +16,8 @@ public class SpaceshipGrid : NetworkBehaviour
 		{
 			allParts[i].SpaceshipPartId = i;
 		}
+
+		RecalculatePhysics();
 	}
 
 	public void SeverConnection(SpaceshipPart partA, SpaceshipPart partB) {
