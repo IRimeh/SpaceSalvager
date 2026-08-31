@@ -65,6 +65,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8696909354234329537}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7570187247525341830}
   m_SourcePrefab: {fileID: 100100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
 --- !u!4 &2734797143650002369 stripped
 Transform:
@@ -110,6 +113,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999914c8c56ebf0488176516feb93542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  SpaceshipPartId: 0
+  connectedParts: []
+  PartMass: 10
+--- !u!114 &7570187247525341830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2734797143650171361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3390aebe42299145a3657d51957f747, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactable
+  ShowTopMostFoldoutHeaderGroup: 1
+  IsBeingHeld:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  IsBeingHeldByLocalPlayer: 0
 --- !u!1001 &8817593178517441754
 PrefabInstance:
   m_ObjectHideFlags: 0

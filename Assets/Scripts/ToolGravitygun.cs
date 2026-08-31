@@ -148,6 +148,7 @@ public class ToolGravitygun : Tool
 				
 				interactable = rbInteractable;
 				hitInteractable = true;
+				break;
 			}
 		}
 
