@@ -76,9 +76,18 @@ public class ToolGravitygun : Tool
 			{
 				grabbedRigidbody = hit.rigidbody;
 				isHolding = true;
+
+				//TODO This is a test code piece that removes the shippart from the grid;
+				if (hit.collider.TryGetComponent(out SpaceshipPart spaceshipPart))
+				{
+					spaceshipPart.SeverPartFromAll();
+				}
+				//TODO This is a test code piece that removes the shippart from the grid;
+
 				if (grabbedRigidbody.TryGetComponent<Interactable>(out Interactable interactable)) {
 					interactable.SetIsBeingHeldServerRpc(true);
 				}
+
 				break;
 			}
 		}
