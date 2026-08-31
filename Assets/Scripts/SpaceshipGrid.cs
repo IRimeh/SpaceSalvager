@@ -21,6 +21,8 @@ public class SpaceshipGrid : NetworkBehaviour
 	}
 
 	public void SeverConnection(SpaceshipPart partA, SpaceshipPart partB) {
+		if (!IsServer) return;
+
 		partA.connectedParts.Remove(partB);
 		partB.connectedParts.Remove(partA);
 

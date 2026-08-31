@@ -13,7 +13,7 @@ public class SpaceshipPart : NetworkBehaviour
 
 	private MeshRenderer meshRenderer = null;
 
-	public float PartMass = 10f; 
+	public float PartMass = 10f;
 
 	private void OnEnable()
 	{
@@ -33,9 +33,11 @@ public class SpaceshipPart : NetworkBehaviour
 	{
 		meshRenderer = GetComponent<MeshRenderer>();
 
-		for (int i = connectedParts.Count - 1; i >= 0; i--) {
+		for (int i = connectedParts.Count - 1; i >= 0; i--)
+		{
 			SpaceshipPart part = connectedParts[i];
-			if (!part.connectedParts.Contains(this)) {
+			if (!part.connectedParts.Contains(this))
+			{
 				connectedParts.Remove(part);
 			}
 		}
@@ -45,22 +47,48 @@ public class SpaceshipPart : NetworkBehaviour
 	{
 		Gizmos.color = Color.cyan;
 
-		foreach (SpaceshipPart part in connectedParts) {
-			if (part != null) {
+		foreach (SpaceshipPart part in connectedParts)
+		{
+			if (part != null)
+			{
 				Gizmos.DrawLine(meshRenderer.bounds.center, part.meshRenderer.bounds.center);
 				Gizmos.DrawCube(meshRenderer.bounds.center, Vector3.one * 0.2f);
 			}
 		}
 	}
 
-	public void SeverPartFromAll() {
+	public void SeverPartFromAll()
+	{
+		// If we are a client, request the server to handle the severing
+		if (!IsServer)
+		{
+			SeverPartFromAllServerRpc();
+			return;
+		}
+
+		// Server logic runs directly
+		ExecuteSeverPartFromAll();
+	}
+
+	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+	private void SeverPartFromAllServerRpc()
+	{
+		ExecuteSeverPartFromAll();
+	}
+
+	private void ExecuteSeverPartFromAll()
+	{
 		SpaceshipGrid parentGrid = GetComponentInParent<SpaceshipGrid>();
+		if (parentGrid == null) return;
 
 		List<SpaceshipPart> connections = new List<SpaceshipPart>(connectedParts);
 
 		foreach (SpaceshipPart neighbour in connections)
 		{
-			parentGrid.SeverConnection(this, neighbour);
+			if (neighbour != null)
+			{
+				parentGrid.SeverConnection(this, neighbour);
+			}
 		}
 	}
 }
