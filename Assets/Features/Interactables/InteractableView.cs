@@ -81,8 +81,8 @@ public class InteractableView : MonoBehaviour
 		if (_interactable.IsBeingHeld.Value)
 			return;
 		
-		_currentTime = time;
 		_interactable.SetIsBeingHeldServerRpc(true);
+		_currentTime = time;
 	}
 
 	private void CopyMeshes()
