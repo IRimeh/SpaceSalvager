@@ -15338,16 +15338,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableView
   _interactable: {fileID: 1473980114310111369}
-  _meshRenderer: {fileID: 1873706963337583127}
+  _sourceMeshFilter: {fileID: 2200211553090878180}
   _targetFilter: {fileID: 1979444954488360769}
+  _outlineMeshRenderers:
+  - {fileID: 1873706963337583127}
+  - {fileID: 2415903438863035978}
+  - {fileID: 5206325890471740539}
   _particleSystem: {fileID: 2196121682138965604}
-  _meshFilters:
-  - {fileID: 2200211553090878180}
-  - {fileID: 7454595404996824216}
-  - {fileID: 9038885189844923873}
   _outlineLayerIndex: 1
   _scaleSpeed: 0.25
-  _effectOnCollisionTime: 5
 --- !u!1 &7672001629382869390
 GameObject:
   m_ObjectHideFlags: 0
