@@ -15193,7 +15193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1500442710
+  GlobalObjectIdHash: 3499476048
   InScenePlacedSourceGlobalObjectIdHash: 3499476048
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -25425,6 +25425,18 @@ PrefabInstance:
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: minPushforce
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: maxGrabDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: maxHoldDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: maxPushDistance
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: playerRigidbody
