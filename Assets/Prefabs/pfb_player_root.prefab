@@ -25417,12 +25417,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8968033773557934240}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: maxPullForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: moveStrength
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: slowingRadius
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: rotationDamper
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: rotationSpring
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: grabFalloff.m_PreInfinity
