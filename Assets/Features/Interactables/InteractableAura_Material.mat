@@ -59,7 +59,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ExtrudeDistance: 1
+    - _ExtrudeDistance: 2
+    - _FresnelPow: 0.6
+    - _FresnelPow2: 15
     - _Multiplier: 1.9
     - _Pow: 0.5
     - _QueueControl: 0
@@ -67,7 +69,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.6367924, g: 0.8742024, b: 1, a: 1}
     - _EndColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FadeDist: {r: 1.25, g: 0.5, b: 0, a: 0}
+    - _FadeDist: {r: 0, g: 1, b: 0, a: 0}
     - _Noise2Smoothstep: {r: 0, g: 0.5, b: 0, a: 0}
     - _Noise2Speed: {r: -0.2, g: -0.1, b: 0, a: 0}
     - _NoiseSpeed: {r: -0.3, g: 0.1, b: 0, a: 0}

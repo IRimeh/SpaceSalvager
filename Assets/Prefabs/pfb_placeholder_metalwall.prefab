@@ -68,6 +68,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7570187247525341830}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8995629961207718105}
   m_SourcePrefab: {fileID: 100100000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
 --- !u!4 &2734797143650002369 stripped
 Transform:
@@ -136,6 +139,36 @@ MonoBehaviour:
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
   IsBeingHeldByLocalPlayer: 0
+--- !u!114 &8995629961207718105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2734797143650171361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc1db610a46944a7e2fb8246a9126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableView
+  _interactable: {fileID: 7570187247525341830}
+  _sourceMeshFilter: {fileID: 2734797143653393889}
+  _targetFilter: {fileID: 6469051739383978077}
+  _outlineMeshRenderers:
+  - {fileID: 2734797143652427553}
+  _particleSystem: {fileID: 6684722774839144824}
+  _outlineLayerIndex: 1
+  _scaleSpeed: 0.25
+--- !u!23 &2734797143652427553 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
+  m_PrefabInstance: {fileID: 2734797143650139969}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &2734797143653393889 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 3300000, guid: 5cd7bad544a06524bb6ccc6364e42e7b, type: 3}
+  m_PrefabInstance: {fileID: 2734797143650139969}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8817593178517441754
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -196,5 +229,15 @@ PrefabInstance:
 --- !u!4 &598180326542111139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8219996832237616505, guid: 9fc6194b27dc8b844a71a3ca42e5a1f9, type: 3}
+  m_PrefabInstance: {fileID: 8817593178517441754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &6469051739383978077 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 2565030951615353991, guid: 9fc6194b27dc8b844a71a3ca42e5a1f9, type: 3}
+  m_PrefabInstance: {fileID: 8817593178517441754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6684722774839144824 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2781682734088633762, guid: 9fc6194b27dc8b844a71a3ca42e5a1f9, type: 3}
   m_PrefabInstance: {fileID: 8817593178517441754}
   m_PrefabAsset: {fileID: 0}
