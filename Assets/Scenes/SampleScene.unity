@@ -155,6 +155,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.17
@@ -270,6 +282,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall (5)
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -326,9 +342,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Mass
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.82
+      value: 2.64
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -443,6 +471,10 @@ PrefabInstance:
     - target: {fileID: 2734797143650171361, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: m_Name
       value: pfb_placeholder_metalwall (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
@@ -648,9 +680,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Mass
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.82
+      value: 9.96
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -658,7 +702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.54
+      value: 3.95
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -777,6 +821,10 @@ PrefabInstance:
     - target: {fileID: 2734797143650171361, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: m_Name
       value: pfb_placeholder_metalwall (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
@@ -1265,6 +1313,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall (7)
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1434,7 +1486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 10
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
@@ -1516,6 +1568,10 @@ PrefabInstance:
     - target: {fileID: 2734797143650171361, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: m_Name
       value: pfb_placeholder_metalwall (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
@@ -1602,6 +1658,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall (6)
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1658,9 +1718,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Mass
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1668,7 +1740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.54
+      value: 3.95
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1773,6 +1845,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall (9)
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1862,6 +1938,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1882,6 +1962,108 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+--- !u!1001 &2022137035
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 466397122651721090, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Name
+      value: InteractableCube (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 466397122651721090, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608397055644655888, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_Mass
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6271674912781389974, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: Ownership
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6271674912781389974, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6271674912781389974, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3458586308
+      objectReference: {fileID: 0}
+    - target: {fileID: 6271674912781389974, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 633766316
+      objectReference: {fileID: 0}
+    - target: {fileID: 8327262473341556479, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: isStatic
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2608397055644655888, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
 --- !u!1001 &2045562140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1901,6 +2083,14 @@ PrefabInstance:
     - target: {fileID: 2608397055644655888, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2178,11 +2368,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_Mass
-      value: 15
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3256279116367642954, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.11
+      value: 5.0300007
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2190,7 +2388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.54
+      value: 3.95
       objectReference: {fileID: 0}
     - target: {fileID: 4908739401976505604, guid: a21e817215e26954b979f7be4858e7bf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2295,6 +2493,10 @@ PrefabInstance:
       value: pfb_placeholder_metalwall
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -2328,6 +2530,7 @@ SceneRoots:
   - {fileID: 1776941899}
   - {fileID: 263328802}
   - {fileID: 696870433}
+  - {fileID: 2022137035}
   - {fileID: 385880934}
   - {fileID: 3000589729804564175}
   - {fileID: 118518405417670238}

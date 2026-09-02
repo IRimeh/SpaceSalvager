@@ -15193,7 +15193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3499476048
+  GlobalObjectIdHash: 1500442710
   InScenePlacedSourceGlobalObjectIdHash: 3499476048
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -15237,7 +15237,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7210306371008419158}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -15303,6 +15303,7 @@ MonoBehaviour:
   BrakeInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   PrimaryInput: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   SecondaryInput: {fileID: 8593751504944708428, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  TertiaryInput: {fileID: 2512230328030633345, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   tools:
   - {fileID: 1275576316430537619}
   decoupler: {fileID: 1120577182094717777}
@@ -15325,6 +15326,7 @@ MonoBehaviour:
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
   IsBeingHeldByLocalPlayer: 0
+  isStatic: 0
 --- !u!114 &7268245371498995686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25417,72 +25419,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8968033773557934240}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: maxPullForce
-      value: 10
+      propertyPath: maxPushforce
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: moveStrength
-      value: 100
+      propertyPath: minPushforce
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: slowingRadius
-      value: 5
-      objectReference: {fileID: 0}
+      propertyPath: playerRigidbody
+      value: 
+      objectReference: {fileID: 8116353280918528803}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: rotationDamper
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: rotationSpring
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_PreInfinity
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[0].inSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[1].inSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[0].outSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: grabFalloff.m_Curve.Array.data[1].outSlope
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 7749036140551329593}
     - target: {fileID: 5494750420628221225, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: m_Name
       value: tool_gravitygun
-      objectReference: {fileID: 0}
-    - target: {fileID: 5817849091041691142, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: _punch.x
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 5817849091041691142, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: _vibrato
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 5817849091041691142, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: _duration
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5817849091041691142, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: _shootParticles

@@ -5298,7 +5298,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5494750420628221225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.048709452, y: 0.30680346, z: 0.33615375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5320,12 +5320,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ToolGravitygun
   ShowTopMostFoldoutHeaderGroup: 1
-  moveStrength: 10
+  playerController: {fileID: 0}
+  moveStrength: 80
+  maxPullMass: 100
+  maxTorque: 200
   minPushforce: 5
   maxPushforce: 10
   timeToMaxCharge: 2
   maxPushDistance: 10
   maxGrabDistance: 10
+  maxHoldDistance: 15
   pushSpherecastRadius: 1
   grabSpherecastRadius: 0.25
   pushFalloff:
@@ -5353,9 +5357,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   arrivalThreshold: 0.1
-  slowingRadius: 3
+  slowingRadius: 7
   maxSpeed: 20
   grabPoint: {fileID: 0}
+  rotationSpring: 15
+  rotationDamper: 2
+  pullSpeed: 5
+  minPullDistance: 0.5
+  playerRigidbody: {fileID: 0}
 --- !u!114 &5817849091041691142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5371,9 +5380,9 @@ MonoBehaviour:
   _toolGravitygun: {fileID: 4872525930032275049}
   _chargeVisualsParent: {fileID: 2075322494727707806}
   _shootParticles: {fileID: 0}
-  _punch: {x: -15, y: 0, z: 0}
-  _duration: 0.5
-  _vibrato: 10
+  _punch: {x: -45, y: 0, z: 0}
+  _duration: 0.2
+  _vibrato: 12
   _elasticity: 0
 --- !u!1 &5662059941417628775
 GameObject:

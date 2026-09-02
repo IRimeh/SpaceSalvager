@@ -7,4 +7,6 @@ public abstract class Tool : NetworkBehaviour
 	public abstract void ReleasePrimary();
 	public abstract void PressSecondary();
 	public abstract void ReleaseSecondary();
+	public abstract void PressTertiary();
+	public abstract void ReleaseTertiary();
 }

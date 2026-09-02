@@ -47,6 +47,16 @@
                     "priority": 0
                 },
                 {
+                    "name": "Tertiary",
+                    "type": "Button",
+                    "id": "f3cf6f85-b29b-42d5-bb30-4e2a224465cf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
                     "name": "Previous",
                     "type": "Button",
                     "id": "2776c80d-3c14-4091-8c56-d04ced07a2b0",
@@ -427,6 +437,17 @@
                     "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ed18d92c-c002-4b4a-8a86-c19a21d50cf5",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Tertiary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

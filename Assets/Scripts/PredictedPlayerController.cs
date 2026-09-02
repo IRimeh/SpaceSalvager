@@ -54,6 +54,8 @@ public class PredictedPlayerController : NetworkBehaviour
 	InputActionReference PrimaryInput;
 	[SerializeField]
 	InputActionReference SecondaryInput;
+	[SerializeField]
+	InputActionReference TertiaryInput;
 
 	[SerializeField]
 	private List<Tool> tools = new List<Tool>();
@@ -77,8 +79,40 @@ public class PredictedPlayerController : NetworkBehaviour
 	private void OnPrimaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleasePrimary();
 	private void OnSecondaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressSecondary();
 	private void OnSecondaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleaseSecondary();
+	private void OnTertiaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressTertiary();
+	private void OnTertiaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleaseTertiary();
 	private void OnBrakeInputPerformed(InputAction.CallbackContext context) => isBraking = true;
 	private void OnBrakeInputCanceled(InputAction.CallbackContext context) => isBraking = false;
+
+	// NEW: Helper properties for the Gravity Gun
+	public float Mass => rigidbody.mass;
+	public Vector3 LinearVelocity => rigidbody.linearVelocity;
+
+	// NEW: Force tracking
+	private Vector3 currentContinuousForce = Vector3.zero;
+	private Vector3 latestServerExternalForce = Vector3.zero;
+
+	// NEW: Store continuous force locally (sent to server in batches)
+	public void SetContinuousForce(Vector3 force)
+	{
+		currentContinuousForce = force;
+	}
+
+	// NEW: One-off impulse trigger for the Hookshot launch
+	public void ApplyImpulse(Vector3 force)
+	{
+		if (IsOwner)
+		{
+			rigidbody.AddForce(force, ForceMode.Impulse);
+			ApplyImpulseServerRpc(force);
+		}
+	}
+
+	[Rpc(SendTo.Server)]
+	private void ApplyImpulseServerRpc(Vector3 force)
+	{
+		rigidbody.AddForce(force, ForceMode.Impulse);
+	}
 
 	public override void OnNetworkSpawn()
 	{
@@ -93,6 +127,8 @@ public class PredictedPlayerController : NetworkBehaviour
 			PrimaryInput.action.canceled += OnPrimaryInputCanceled;
 			SecondaryInput.action.performed += OnSecondaryInputPerformed;
 			SecondaryInput.action.canceled += OnSecondaryInputCanceled;
+			TertiaryInput.action.performed += OnTertiaryInputPerformed;
+			TertiaryInput.action.canceled += OnTertiaryInputCanceled;
 
 			Cursor.lockState = CursorLockMode.Locked;
 
@@ -153,6 +189,11 @@ public class PredictedPlayerController : NetworkBehaviour
 		mouseRotationVelocity += new Vector2(LookInput.action.ReadValue<Vector2>().x, -LookInput.action.ReadValue<Vector2>().y) * mouseRotationPerUnit;
 		mouseRotationVelocity = Vector2.Lerp(mouseRotationVelocity, Vector2.zero, mouseRotationDrag * Time.deltaTime);
 
+		//TODO Mouselook is kinda framerate dependend I think
+		//transform.Rotate(Vector3.up, mouseRotationVelocity.x * Time.deltaTime);
+		//transform.Rotate(Vector3.right, mouseRotationVelocity.y * Time.deltaTime);
+		//transform.Rotate(Vector3.forward, rotationVelocity.z * Time.deltaTime);
+
 		transform.Rotate(Vector3.up, mouseRotationVelocity.x);
 		transform.Rotate(Vector3.right, mouseRotationVelocity.y);
 		transform.Rotate(Vector3.forward, rotationVelocity.z * Mathf.Deg2Rad);
@@ -170,12 +211,16 @@ public class PredictedPlayerController : NetworkBehaviour
 		{
 			ApplyPhysicsLogic(currentThrustInput, isBraking);
 
+			// NEW: Apply the grappling hook force locally for client prediction
+			rigidbody.AddForce(currentContinuousForce, ForceMode.Force);
+
 			if (!IsServer)
 			{
 				rpcTimer += Time.fixedDeltaTime;
 				if (rpcTimer >= RpcSendInterval)
 				{
-					SendInputServerRpc(currentThrustInput, isBraking, rigidbody.rotation);
+					// UPDATED: Now passes the continuous force to the server
+					SendInputServerRpc(currentThrustInput, isBraking, rigidbody.rotation, currentContinuousForce);
 					rpcTimer = 0.0f;
 				}
 
@@ -188,6 +233,9 @@ public class PredictedPlayerController : NetworkBehaviour
 			rigidbody.rotation = Quaternion.Slerp(rigidbody.rotation, latestServerRotation, 15f * Time.fixedDeltaTime);
 
 			ApplyPhysicsLogic(latestServerThrust, latestServerBraking);
+
+			// NEW: Server applies the synced grappling hook force authoritatively 
+			rigidbody.AddForce(latestServerExternalForce, ForceMode.Force);
 		}
 		else
 		{
@@ -205,11 +253,12 @@ public class PredictedPlayerController : NetworkBehaviour
 	}
 
 	[Rpc(SendTo.Server)]
-	private void SendInputServerRpc(Vector3 thrustInput, bool braking, Quaternion clientRotation)
+	private void SendInputServerRpc(Vector3 thrustInput, bool braking, Quaternion clientRotation, Vector3 externalForce) // UPDATED
 	{
 		latestServerThrust = thrustInput;
 		latestServerBraking = braking;
 		latestServerRotation = clientRotation;
+		latestServerExternalForce = externalForce; // NEW
 	}
 
 	private void ApplyPhysicsLogic(Vector3 thrustInput, bool braking)
