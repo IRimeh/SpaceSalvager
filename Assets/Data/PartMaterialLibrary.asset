@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 944146a10b268db48ab6b2a05d376e2f, type: 3}
+  m_Name: PartMaterialLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::PartMaterialLibrary
+  Materials:
+  - Name: Aluminium
+    Density: 2.7
+  - Name: Steel
+    Density: 7.85
+  - Name: Titanium
+    Density: 4.5
+  - Name: Carbon Composite
+    Density: 1.6
+  - Name: Glass
+    Density: 2.5
+  - Name: Gold
+    Density: 19.3

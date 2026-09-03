@@ -8,9 +8,69 @@ public class ShipPartEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
-		DrawDefaultInspector();
-
 		SpaceshipPart currentPart = (SpaceshipPart)target;
+
+		// Draw the default inspector but override how the mass fields are shown.
+		DrawPropertiesExcluding(serializedObject, "m_Script", "materialName", "PartMass");
+
+		SerializedProperty libraryProp = serializedObject.FindProperty("materialLibrary");
+		SerializedProperty materialNameProp = serializedObject.FindProperty("materialName");
+
+		PartMaterialLibrary library = libraryProp.objectReferenceValue as PartMaterialLibrary;
+
+		bool materialChanged = false;
+
+		if (library != null && library.Materials != null && library.Materials.Count > 0)
+		{
+			string[] names = new string[library.Materials.Count];
+			for (int i = 0; i < names.Length; i++)
+				names[i] = library.Materials[i] != null ? library.Materials[i].Name : "(null)";
+
+			int currentIndex = Mathf.Max(0, System.Array.IndexOf(names, materialNameProp.stringValue));
+
+			EditorGUI.BeginChangeCheck();
+			int newIndex = EditorGUILayout.Popup("Material", currentIndex, names);
+			if (EditorGUI.EndChangeCheck())
+			{
+				materialNameProp.stringValue = names[newIndex];
+				materialChanged = true;
+			}
+		}
+		else
+		{
+			EditorGUI.BeginChangeCheck();
+			EditorGUILayout.PropertyField(materialNameProp);
+			if (EditorGUI.EndChangeCheck())
+				materialChanged = true;
+
+			if (library == null)
+				EditorGUILayout.HelpBox("Assign a Part Material Library to pick a material by name.", MessageType.Info);
+		}
+
+		serializedObject.ApplyModifiedProperties();
+
+		// When the material changes, recalculate the mass automatically.
+		if (materialChanged)
+		{
+			Undo.RecordObject(currentPart, "Change Part Material");
+			currentPart.RecalculateMass();
+			EditorUtility.SetDirty(currentPart);
+		}
+
+		// Show mass read-only; it is only updated via the button below.
+		using (new EditorGUI.DisabledScope(true))
+		{
+			EditorGUILayout.FloatField("Part Mass", currentPart.PartMass);
+			EditorGUILayout.FloatField("Mesh Volume", currentPart.CalculateVolume());
+		}
+
+		if (GUILayout.Button("Calculate Mass"))
+		{
+			Undo.RecordObject(currentPart, "Calculate Part Mass");
+			currentPart.RecalculateMass();
+			EditorUtility.SetDirty(currentPart);
+		}
+
 		EditorGUILayout.Space();
 
 		GUI.backgroundColor = isLinkingMode ? Color.green : Color.white;

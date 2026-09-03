@@ -283,8 +283,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84664
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -474,8 +482,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84658
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 2
@@ -824,8 +840,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84658
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -948,6 +972,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: pfb_placeholder_metalwall (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: PartMass
+      value: 120.84664
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 5
@@ -1314,8 +1350,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84658
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -1486,8 +1530,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84664
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 5
@@ -1571,8 +1623,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84664
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -1659,8 +1719,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84664
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -1846,8 +1914,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84658
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -1939,8 +2015,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84658
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3
@@ -2494,8 +2578,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: PartMass
-      value: 80
+      value: 120.84664
       objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialName
+      value: Aluminium
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
+      propertyPath: materialLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
     - target: {fileID: 8696909354234329537, guid: 0dd6050a703711c478946725ee4c71fe, type: 3}
       propertyPath: connectedParts.Array.size
       value: 3

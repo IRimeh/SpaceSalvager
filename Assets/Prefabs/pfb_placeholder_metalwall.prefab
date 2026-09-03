@@ -119,7 +119,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   SpaceshipPartId: 0
   connectedParts: []
-  PartMass: 5
+  materialLibrary: {fileID: 11400000, guid: 07543e57830d6444cb23309887f86251, type: 2}
+  materialName: Steel
+  PartMass: 351.3504
 --- !u!114 &7570187247525341830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +141,7 @@ MonoBehaviour:
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: 0
   IsBeingHeldByLocalPlayer: 0
+  isStatic: 0
 --- !u!114 &8995629961207718105
 MonoBehaviour:
   m_ObjectHideFlags: 0
