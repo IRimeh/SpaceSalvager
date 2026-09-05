@@ -9,6 +9,7 @@ public class Interactable : NetworkBehaviour
 	public NetworkVariable<bool> IsBeingHeld = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 	public bool IsBeingHeldByLocalPlayer = false;
 	public event Action OnStartHolding = delegate { };
+	public event Action OnStopHolding = delegate { };
 
 	[SerializeField]
 	private bool isStatic = false;
@@ -23,5 +24,7 @@ public class Interactable : NetworkBehaviour
 		IsBeingHeld.Value = isBeingHeld;
 		if(isBeingHeld)
 			OnStartHolding.Invoke();
+		else
+			OnStopHolding.Invoke();
 	}
 }

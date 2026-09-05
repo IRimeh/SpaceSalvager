@@ -15348,7 +15348,7 @@ MonoBehaviour:
   - {fileID: 5206325890471740539}
   _particleSystem: {fileID: 2196121682138965604}
   _outlineLayerIndex: 1
-  _scaleSpeed: 0.25
+  _scaleSpeed: 0.5
 --- !u!1 &7672001629382869390
 GameObject:
   m_ObjectHideFlags: 0
@@ -25418,26 +25418,6 @@ PrefabInstance:
       propertyPath: grabPoint
       value: 
       objectReference: {fileID: 8968033773557934240}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: maxPushforce
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: minPushforce
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: maxGrabDistance
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: maxHoldDistance
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
-      propertyPath: maxPushDistance
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: playerRigidbody
       value: 

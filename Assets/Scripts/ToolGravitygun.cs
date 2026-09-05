@@ -1,8 +1,9 @@
 using System;
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class ToolGravitygun : Tool
 {
@@ -84,6 +85,10 @@ public class ToolGravitygun : Tool
 
 	[SerializeField]
 	private Rigidbody playerRigidbody;
+	[SerializeField] 
+	private LineRenderer _lineRenderer;
+	[SerializeField] 
+	private float _lineTweenDuration = 0.5f;
 
 	private bool isPulling;
 
@@ -91,10 +96,15 @@ public class ToolGravitygun : Tool
 	private bool isCharging;
 	private float currentCharge;
 	private Rigidbody grabbedRigidbody;
+	private Interactable grabbedInteractable;
 	private Transform playerCamera;
 
 	private Vector3 localGrabOffset;
 	private Quaternion initialGrabRotation;
+
+	private Vector3 _grabbedLocalPoint;
+	private float _lineRendererStartWidth;
+	private TweenerCore<float, float, FloatOptions> _lineTween;
 
 	public float CurrentCharge01 => Mathf.Clamp01(currentCharge / timeToMaxCharge);
 	public event Action<float> OnShootEvent = delegate { };
@@ -108,6 +118,11 @@ public class ToolGravitygun : Tool
 	private Rigidbody serverGrabbedRigidbody;
 	private Vector3 serverLocalGrabOffset;
 	private Quaternion serverInitialGrabRotation;
+
+	private void Awake()
+	{
+		_lineRendererStartWidth = _lineRenderer.widthMultiplier;
+	}
 
 	protected override void OnNetworkPostSpawn()
 	{
@@ -140,6 +155,7 @@ public class ToolGravitygun : Tool
 		grabbedRigidbody = rigidbody;
 		localGrabOffset = grabbedRigidbody.transform.InverseTransformPoint(hitPoint);
 		initialGrabRotation = grabbedRigidbody.rotation;
+		grabbedInteractable = interactable;
 
 		// Initialize the grab distance and sync it
 		float initialDistance = Vector3.Distance(playerCamera.position, hitPoint);
@@ -152,18 +168,25 @@ public class ToolGravitygun : Tool
 			StartHoldingServerRpc(netObj.NetworkObjectId, localGrabOffset, initialGrabRotation);
 		}
 
-		interactable.SetIsBeingHeldServerRpc(true);
+		grabbedInteractable.SetIsBeingHeldServerRpc(true);
 		isHolding = true;
+
+		_grabbedLocalPoint = rigidbody.transform.InverseTransformPoint(hitPoint);
+
+		_lineTween.Kill();
+		_lineTween = DOTween.To(() => _lineRenderer.widthMultiplier, (x) => 
+																	{
+																		_lineRenderer.widthMultiplier = x;
+																	}, _lineRendererStartWidth, _lineTweenDuration);
 		GameCursor.SetCursorIsInteracting();
 	}
 
 	public override void ReleasePrimary()
 	{
-		if (!IsOwner) return;
 		if (!isHolding) return;
-
-		if (grabbedRigidbody.TryGetComponent(out Interactable interactable))
-			interactable.SetIsBeingHeldServerRpc(false);
+		if (!IsOwner) return;
+		
+		grabbedInteractable.SetIsBeingHeldServerRpc(false);
 
 		isHolding = false;
 		grabbedRigidbody = null;
@@ -177,6 +200,11 @@ public class ToolGravitygun : Tool
 		// NEW: Tell the server to stop tracking
 		StopHoldingServerRpc();
 
+		_lineTween.Kill();
+		_lineTween = DOTween.To(() => _lineRenderer.widthMultiplier, (x) => 
+																{
+																	_lineRenderer.widthMultiplier = x;
+																}, 0.0f, _lineTweenDuration);
 		GameCursor.SetCursorDefault();
 	}
 
@@ -349,6 +377,34 @@ public class ToolGravitygun : Tool
 			// Apply locally and sync to server
 			grabPoint.localPosition = new Vector3(grabPoint.localPosition.x, grabPoint.localPosition.y, newZ);
 			networkedGrabDistance.Value = newZ;
+		}
+		
+		UpdateLine();
+	}
+
+	private void UpdateLine()
+	{
+		_lineRenderer.enabled = isHolding;
+		
+		if (!isHolding) return;
+
+		Vector3 p0 = _lineRenderer.transform.position;
+		Vector3 p1 = grabPoint.position;
+		Vector3 p2 = grabbedRigidbody.transform.TransformPoint(_grabbedLocalPoint);
+
+		int positionCount = _lineRenderer.positionCount;
+		for (int i = 0; i < positionCount; i++)
+		{
+			Vector3 point = Sample((float)i / (positionCount - 1));
+			Vector3 localPosition = _lineRenderer.transform.InverseTransformPoint(point);
+			_lineRenderer.SetPosition(i, localPosition);
+		}
+
+		Vector3 Sample(float perc01)
+		{
+			Vector3 lerp0 = Vector3.Lerp(p0, p1, perc01);
+			Vector3 lerp1 = Vector3.Lerp(p1, p2, perc01);
+			return Vector3.Lerp(lerp0, lerp1, perc01);
 		}
 	}
 
