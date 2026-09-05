@@ -129,6 +129,11 @@ public class InteractableView : MonoBehaviour
 				triangles[i] = newIndex;
 		}
 
+		var sourceRenderer = _sourceMeshFilter.GetComponent<Renderer>();
+		Vector3 offset = sourceRenderer.transform.InverseTransformDirection(sourceRenderer.transform.position - sourceRenderer.bounds.center);
+		for (int i = 0; i < verts.Count; i++)
+			verts[i] += offset;
+
 		Mesh newMesh = new Mesh
 		{
 			vertices = verts.ToArray(),
@@ -138,9 +143,5 @@ public class InteractableView : MonoBehaviour
 		newMesh.RecalculateNormals();
 		_targetFilter.sharedMesh = newMesh;
 		_targetFilter.transform.localScale = Vector3.zero;
-		var targetRenderer = _targetFilter.GetComponent<Renderer>();
-		var sourceRenderer = _sourceMeshFilter.GetComponent<Renderer>(); 
-		Vector3 offset = sourceRenderer.bounds.center - targetRenderer.bounds.center;
-		_targetFilter.transform.localPosition = offset;
 	}
 }
