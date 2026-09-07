@@ -10,10 +10,11 @@ public class ToolGravitygun : Tool
 	[SerializeField]
 	private PredictedPlayerController playerController;
 
+	[Tooltip("")]
 	[SerializeField]
 	private float moveStrength = 20.0f;
 
-	// NEW: Maximum force the gun can exert (ideal for future upgrades)
+	[Tooltip("The maximum mass the gravitygun can move efficiantly")]
 	[SerializeField]
 	private float maxPullMass = 100.0f;
 

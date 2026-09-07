@@ -15286,16 +15286,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   rigidbody: {fileID: 8116353280918528803}
-  mouseRotationPerUnit: 0.002
-  mouseRotationDrag: 3
-  keyboardRotationAcceleration: 4
-  keyboardRotationBrakeAcceleration: 8
-  keyboardRotationMaxSpeed: 90
-  movementAcceleration: 2.2
-  brakeAcceleration: 8.7
-  movementMaxVelocity: 8.7
   playerModel: {fileID: 7703903204354229842}
   playerCamera: {fileID: 5623500556067009872}
+  decoupler: {fileID: 1120577182094717777}
+  tools:
+  - {fileID: 1275576316430537619}
   LookInput: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   MoveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   UpDownInput: {fileID: -3586815616945235343, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -15304,9 +15299,14 @@ MonoBehaviour:
   PrimaryInput: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   SecondaryInput: {fileID: 8593751504944708428, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   TertiaryInput: {fileID: 2512230328030633345, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  tools:
-  - {fileID: 1275576316430537619}
-  decoupler: {fileID: 1120577182094717777}
+  mouseRotationPerUnit: 0.2
+  mouseRotationDrag: 3
+  keyboardRotationAcceleration: 40
+  keyboardRotationBrakeAcceleration: 80
+  keyboardRotationMaxSpeed: 160
+  movementAcceleration: 2.2
+  brakeAcceleration: 8.7
+  movementMaxVelocity: 8.7
 --- !u!114 &1473980114310111369
 MonoBehaviour:
   m_ObjectHideFlags: 0

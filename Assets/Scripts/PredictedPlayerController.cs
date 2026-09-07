@@ -4,22 +4,78 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using NaughtyAttributes;
 
 public class PredictedPlayerController : NetworkBehaviour
 {
+	#region References
+	[Foldout("References")]
 	[SerializeField]
 	private Rigidbody rigidbody;
+
+	[Foldout("References")]
 	[SerializeField]
-	private float mouseRotationPerUnit = 2.0f;
+	private Transform playerModel = null;
+
+	[Foldout("References")]
 	[SerializeField]
-	private float mouseRotationDrag = 2.0f;
+	private Transform playerCamera = null;
+
+	[Foldout("References")]
+	[SerializeField]
+	private VisualDecoupler decoupler;
+
+	[Foldout("References")]
+	[SerializeField]
+	private List<Tool> tools = new List<Tool>();
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference LookInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference MoveInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference UpDownInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference RollInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference BrakeInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference PrimaryInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference SecondaryInput;
+
+	[Foldout("References")]
+	[SerializeField]
+	InputActionReference TertiaryInput;
+
+	private TextMeshProUGUI velocityDisplay = null;
+	#endregion
+
+	#region Input Variables
+	[SerializeField]
+	private float mouseRotationPerUnit = 0.2f;
+	[SerializeField]
+	private float mouseRotationDrag = 3f;
 
 	[SerializeField]
-	private float keyboardRotationAcceleration = 45.0f;
+	private float keyboardRotationAcceleration = 40f;
 	[SerializeField]
-	private float keyboardRotationBrakeAcceleration = 180.0f;
+	private float keyboardRotationBrakeAcceleration = 80f;
 	[SerializeField]
-	private float keyboardRotationMaxSpeed = 360.0f;
+	private float keyboardRotationMaxSpeed = 160f;
 
 	[SerializeField]
 	private float movementAcceleration = 2.2f;
@@ -27,54 +83,31 @@ public class PredictedPlayerController : NetworkBehaviour
 	private float brakeAcceleration = 8.7f;
 	[SerializeField]
 	private float movementMaxVelocity = 8.7f;
+	#endregion
 
-	[SerializeField]
-	private Transform playerModel = null;
-	[SerializeField]
-	private Transform playerCamera = null;
+	private int currentTool = 0;
 
-	private TextMeshProUGUI velocityDisplay = null;
 	private Vector3 currentThrustInput = Vector3.zero;
 	private bool isBraking = false;
-
 	private Vector3 rotationVelocity = Vector3.zero;
 	private Vector2 mouseRotationVelocity = Vector2.zero;
-
-	[SerializeField]
-	InputActionReference LookInput;
-	[SerializeField]
-	InputActionReference MoveInput;
-	[SerializeField]
-	InputActionReference UpDownInput;
-	[SerializeField]
-	InputActionReference RollInput;
-	[SerializeField]
-	InputActionReference BrakeInput;
-	[SerializeField]
-	InputActionReference PrimaryInput;
-	[SerializeField]
-	InputActionReference SecondaryInput;
-	[SerializeField]
-	InputActionReference TertiaryInput;
-
-	[SerializeField]
-	private List<Tool> tools = new List<Tool>();
-	private int currentTool = 0;
 	private NetworkVariable<Vector3> serverPosition = new();
 	private NetworkVariable<Quaternion> serverRotation = new();
 	private NetworkVariable<Vector3> serverLinearVelocity = new();
-
-	[SerializeField]
-	private VisualDecoupler decoupler;
-
 	private Vector3 latestServerThrust = Vector3.zero;
 	private bool latestServerBraking = false;
 	private Quaternion latestServerRotation = Quaternion.identity;
+	public float Mass => rigidbody.mass;
+	public Vector3 LinearVelocity => rigidbody.linearVelocity;
+	private Vector3 currentContinuousForce = Vector3.zero;
+	private Vector3 latestServerExternalForce = Vector3.zero;
 
+	#region RPC Timer Variables
 	private float rpcTimer = 0f;
 	private const float RpcSendInterval = 0.05f;
+	#endregion
 
-
+	#region Input Callbacks
 	private void OnPrimaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressPrimary();
 	private void OnPrimaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleasePrimary();
 	private void OnSecondaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressSecondary();
@@ -83,14 +116,7 @@ public class PredictedPlayerController : NetworkBehaviour
 	private void OnTertiaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleaseTertiary();
 	private void OnBrakeInputPerformed(InputAction.CallbackContext context) => isBraking = true;
 	private void OnBrakeInputCanceled(InputAction.CallbackContext context) => isBraking = false;
-
-	// NEW: Helper properties for the Gravity Gun
-	public float Mass => rigidbody.mass;
-	public Vector3 LinearVelocity => rigidbody.linearVelocity;
-
-	// NEW: Force tracking
-	private Vector3 currentContinuousForce = Vector3.zero;
-	private Vector3 latestServerExternalForce = Vector3.zero;
+	#endregion
 
 	// NEW: Store continuous force locally (sent to server in batches)
 	public void SetContinuousForce(Vector3 force)
@@ -98,7 +124,6 @@ public class PredictedPlayerController : NetworkBehaviour
 		currentContinuousForce = force;
 	}
 
-	// NEW: One-off impulse trigger for the Hookshot launch
 	public void ApplyImpulse(Vector3 force)
 	{
 		if (IsOwner)
@@ -134,6 +159,7 @@ public class PredictedPlayerController : NetworkBehaviour
 
 			velocityDisplay = FindAnyObjectByType<UIVelocity>().GetComponent<TextMeshProUGUI>();
 
+			//TODO Temporary. Add actuall Spawnpoint logic
 			Vector2 spawnPoint = UnityEngine.Random.insideUnitCircle.normalized * 3;
 			transform.position = transform.position + new Vector3(spawnPoint.x, 0.0f, spawnPoint.y);
 		}
@@ -141,20 +167,24 @@ public class PredictedPlayerController : NetworkBehaviour
 		{
 			latestServerRotation = transform.rotation;
 		}
-		else if (!IsServer) {
+		else if (!IsServer)
+		{
 			rigidbody.isKinematic = true;
 		}
 	}
 
 	public override void OnNetworkDespawn()
 	{
-		if (IsOwner) {
+		if (IsOwner)
+		{
 			BrakeInput.action.performed -= OnBrakeInputPerformed;
 			BrakeInput.action.canceled -= OnBrakeInputCanceled;
 			PrimaryInput.action.performed -= OnPrimaryInputPerformed;
 			PrimaryInput.action.canceled -= OnPrimaryInputCanceled;
 			SecondaryInput.action.performed -= OnSecondaryInputPerformed;
 			SecondaryInput.action.canceled -= OnSecondaryInputCanceled;
+			TertiaryInput.action.performed -= OnTertiaryInputPerformed;
+			TertiaryInput.action.canceled -= OnTertiaryInputCanceled;
 		}
 
 		Destroy(decoupler.gameObject);
@@ -164,15 +194,18 @@ public class PredictedPlayerController : NetworkBehaviour
 	{
 		if (!IsOwner) return;
 
+		//Get Thrustinput if not braking
+		currentThrustInput = Vector3.zero;
+
 		if (!isBraking)
 		{
-			currentThrustInput = new Vector3(MoveInput.action.ReadValue<Vector2>().x, UpDownInput.action.ReadValue<float>(), MoveInput.action.ReadValue<Vector2>().y) * movementAcceleration;
-		}
-		else
-		{
-			currentThrustInput = Vector3.zero;
+			Vector2 MoveInputValue = MoveInput.action.ReadValue<Vector2>();
+			float UpDownInputValue = UpDownInput.action.ReadValue<float>();
+			currentThrustInput = new Vector3(MoveInputValue.x, UpDownInputValue, MoveInputValue.y) * movementAcceleration;
 		}
 
+
+		//Calculate Input or Damper depending on if the player presses the roll key
 		float NewRollVelocity = rotationVelocity.z;
 		float RollInputValue = RollInput.action.ReadValue<float>();
 
@@ -182,21 +215,27 @@ public class PredictedPlayerController : NetworkBehaviour
 		}
 		else
 		{
-			NewRollVelocity -= Mathf.Clamp(keyboardRotationBrakeAcceleration * Time.deltaTime * Mathf.Sign(NewRollVelocity), NewRollVelocity * -Mathf.Sign(NewRollVelocity), NewRollVelocity * Mathf.Sign(NewRollVelocity));
+			//Calculate Deceleration and make sure it doesnt overshoot 0
+			float NewRollVelocitySign = Mathf.Sign(NewRollVelocity);
+			NewRollVelocity -= Mathf.Clamp(keyboardRotationBrakeAcceleration * NewRollVelocitySign * Time.deltaTime, NewRollVelocity * -NewRollVelocitySign, NewRollVelocity * NewRollVelocitySign);
 		}
 
+		//Apply Roll Velocity and clamp it to max speed
 		rotationVelocity.z = Mathf.Clamp(NewRollVelocity, -keyboardRotationMaxSpeed, keyboardRotationMaxSpeed);
-		mouseRotationVelocity += new Vector2(LookInput.action.ReadValue<Vector2>().x, -LookInput.action.ReadValue<Vector2>().y) * mouseRotationPerUnit;
-		mouseRotationVelocity = Vector2.Lerp(mouseRotationVelocity, Vector2.zero, mouseRotationDrag * Time.deltaTime);
 
-		//TODO Mouselook is kinda framerate dependend I think
-		//transform.Rotate(Vector3.up, mouseRotationVelocity.x * Time.deltaTime);
-		//transform.Rotate(Vector3.right, mouseRotationVelocity.y * Time.deltaTime);
-		//transform.Rotate(Vector3.forward, rotationVelocity.z * Time.deltaTime);
 
-		transform.Rotate(Vector3.up, mouseRotationVelocity.x);
-		transform.Rotate(Vector3.right, mouseRotationVelocity.y);
-		transform.Rotate(Vector3.forward, rotationVelocity.z * Mathf.Deg2Rad);
+		Vector2 LookInputValue = LookInput.action.ReadValue<Vector2>();
+		mouseRotationVelocity += new Vector2(LookInputValue.x, -LookInputValue.y) * mouseRotationPerUnit;
+		mouseRotationVelocity *= Mathf.Exp(-mouseRotationDrag * Time.deltaTime);
+
+
+		Vector3 rotationThisFrame = new Vector3(
+			mouseRotationVelocity.y,
+			mouseRotationVelocity.x,
+			rotationVelocity.z
+			) * Time.deltaTime;
+
+		transform.Rotate(rotationThisFrame, Space.Self);
 
 		// UI Stuff
 		if (velocityDisplay != null)
