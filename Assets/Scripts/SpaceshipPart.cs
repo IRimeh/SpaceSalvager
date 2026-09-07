@@ -13,6 +13,12 @@ public class SpaceshipPart : NetworkBehaviour
 
 	private MeshRenderer meshRenderer = null;
 
+	[SerializeField]
+	private int cutResistance = 1;
+
+	[SerializeField]
+	private bool sliceable = false;
+
 	[Header("Mass")]
 	[Tooltip("Library that defines the available materials and their densities.")]
 	public PartMaterialLibrary materialLibrary;
@@ -101,6 +107,42 @@ public class SpaceshipPart : NetworkBehaviour
 				Gizmos.DrawLine(meshRenderer.bounds.center, part.meshRenderer.bounds.center);
 				Gizmos.DrawCube(meshRenderer.bounds.center, Vector3.one * 0.2f);
 			}
+		}
+	}
+
+	public void EvaporatePart()
+	{
+		Debug.Log("EvaporatePart");
+
+		// Despawning is server-authoritative in Netcode for GameObjects.
+		// If we are a client, ask the server to perform the evaporation.
+		if (!IsServer)
+		{
+			EvaporatePartServerRpc();
+			return;
+		}
+
+		ExecuteEvaporatePart();
+	}
+
+	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+	private void EvaporatePartServerRpc()
+	{
+		Debug.Log("EvaporatePartServerRpc");
+		ExecuteEvaporatePart();
+	}
+
+	private void ExecuteEvaporatePart()
+	{
+		Debug.Log("ExecuteEvaporatePart");
+		// First disconnect this part from all its neighbours (server-side logic).
+		ExecuteSeverPartFromAll();
+
+		// Then despawn & destroy the NetworkObject. This propagates to all clients.
+		NetworkObject netObj = NetworkObject;
+		if (netObj != null && netObj.IsSpawned)
+		{
+			netObj.Despawn(true);
 		}
 	}
 

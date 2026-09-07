@@ -10,7 +10,6 @@ public class ToolGravitygun : Tool
 	[SerializeField]
 	private PredictedPlayerController playerController;
 
-	[Tooltip("")]
 	[SerializeField]
 	private float moveStrength = 20.0f;
 
@@ -152,7 +151,7 @@ public class ToolGravitygun : Tool
 		{
 			if (collider.TryGetComponent(out SpaceshipPart spaceshipPart))
 			{
-				spaceshipPart.SeverPartFromAll();
+				//spaceshipPart.SeverPartFromAll();
 				if (TryGetFirstHitInteractable(out interactable, out rigidbody, out collider, out hitPoint, out hit))
 				{
 					StartHolding(rigidbody, interactable, hitPoint, hit);

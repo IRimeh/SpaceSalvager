@@ -85,7 +85,12 @@ public class PredictedPlayerController : NetworkBehaviour
 	private float movementMaxVelocity = 8.7f;
 	#endregion
 
-	private int currentTool = 0;
+	// Networked so remote clients also see which tool is active (and toggle the correct model).
+	// Owner writes it (via the scroll wheel); everyone reads it.
+	private NetworkVariable<int> currentTool = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+	[SerializeField]
+	private float toolSwitchScrollThreshold = 0.01f;
 
 	private Vector3 currentThrustInput = Vector3.zero;
 	private bool isBraking = false;
@@ -108,14 +113,57 @@ public class PredictedPlayerController : NetworkBehaviour
 	#endregion
 
 	#region Input Callbacks
-	private void OnPrimaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressPrimary();
-	private void OnPrimaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleasePrimary();
-	private void OnSecondaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressSecondary();
-	private void OnSecondaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleaseSecondary();
-	private void OnTertiaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool].PressTertiary();
-	private void OnTertiaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool].ReleaseTertiary();
+	private void OnPrimaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool.Value].PressPrimary();
+	private void OnPrimaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool.Value].ReleasePrimary();
+	private void OnSecondaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool.Value].PressSecondary();
+	private void OnSecondaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool.Value].ReleaseSecondary();
+	private void OnTertiaryInputPerformed(InputAction.CallbackContext context) => tools[currentTool.Value].PressTertiary();
+	private void OnTertiaryInputCanceled(InputAction.CallbackContext context) => tools[currentTool.Value].ReleaseTertiary();
 	private void OnBrakeInputPerformed(InputAction.CallbackContext context) => isBraking = true;
 	private void OnBrakeInputCanceled(InputAction.CallbackContext context) => isBraking = false;
+	#endregion
+
+	#region Tool Switching
+	// Owner-only: reads the mouse scroll wheel and cycles the active tool index.
+	private void HandleToolSwitchInput()
+	{
+		if (tools.Count <= 1) return;
+		if (Mouse.current == null) return;
+
+		float scroll = Mouse.current.scroll.ReadValue().y;
+		if (Mathf.Abs(scroll) < toolSwitchScrollThreshold) return;
+
+		int direction = scroll > 0f ? 1 : -1;
+		int count = tools.Count;
+		// Wrap around in both directions.
+		int newIndex = ((currentTool.Value + direction) % count + count) % count;
+
+		if (newIndex != currentTool.Value)
+		{
+			// Owner has write permission; this replicates and triggers OnValueChanged everywhere.
+			currentTool.Value = newIndex;
+		}
+	}
+
+	// Runs on every peer (via the NetworkVariable callback) so the correct tool model is shown for all.
+	private void OnCurrentToolChanged(int previousIndex, int newIndex)
+	{
+		ApplyToolActiveStates(newIndex);
+	}
+
+	private void ApplyToolActiveStates(int activeIndex)
+	{
+		for (int i = 0; i < tools.Count; i++)
+		{
+			if (tools[i] == null) continue;
+
+			bool shouldBeActive = (i == activeIndex);
+			if (tools[i].gameObject.activeSelf != shouldBeActive)
+			{
+				tools[i].gameObject.SetActive(shouldBeActive);
+			}
+		}
+	}
 	#endregion
 
 	// NEW: Store continuous force locally (sent to server in batches)
@@ -141,6 +189,10 @@ public class PredictedPlayerController : NetworkBehaviour
 
 	public override void OnNetworkSpawn()
 	{
+		// Everyone (owner, server, remote clients) keeps the correct tool model enabled.
+		currentTool.OnValueChanged += OnCurrentToolChanged;
+		ApplyToolActiveStates(currentTool.Value);
+
 		if (IsOwner)
 		{
 			playerCamera.gameObject.SetActive(true);
@@ -175,6 +227,8 @@ public class PredictedPlayerController : NetworkBehaviour
 
 	public override void OnNetworkDespawn()
 	{
+		currentTool.OnValueChanged -= OnCurrentToolChanged;
+
 		if (IsOwner)
 		{
 			BrakeInput.action.performed -= OnBrakeInputPerformed;
@@ -193,6 +247,8 @@ public class PredictedPlayerController : NetworkBehaviour
 	private void Update()
 	{
 		if (!IsOwner) return;
+
+		HandleToolSwitchInput();
 
 		//Get Thrustinput if not braking
 		currentThrustInput = Vector3.zero;
