@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -87,11 +88,13 @@ public class ToolGravitygun : Tool
 	[SerializeField]
 	private Rigidbody playerRigidbody;
 	[SerializeField] 
-	private LineRenderer _lineRenderer;
+	private List<LineRenderer> _lineRenderers;
 	[SerializeField] 
 	private float _lineTweenDuration = 0.5f;
 	[SerializeField] 
 	private float _normalRaycastDistance = 0.1f;
+	[SerializeField] 
+	private float _grabNormalOffset = 1.0f;
 
 	private bool isPulling;
 	private float _lineTween01 = 0;
@@ -109,7 +112,7 @@ public class ToolGravitygun : Tool
 	private Quaternion initialGrabRotation;
 
 	private Vector3 _grabbedLocalPoint;
-	private float _lineRendererStartWidth;
+	private List<float> _lineRendererStartWidths = new();
 	private TweenerCore<float, float, FloatOptions> _lineTween;
 
 	public float CurrentCharge01 => Mathf.Clamp01(currentCharge / timeToMaxCharge);
@@ -134,7 +137,11 @@ public class ToolGravitygun : Tool
 
 	private void Awake()
 	{
-		_lineRendererStartWidth = _lineRenderer.widthMultiplier;
+		_lineRendererStartWidths.Clear();
+		for (int i = 0; i < _lineRenderers.Count; i++)
+		{
+			_lineRendererStartWidths.Add(_lineRenderers[i].widthMultiplier);
+		}
 	}
 
 	protected override void OnNetworkPostSpawn()
@@ -199,7 +206,10 @@ public class ToolGravitygun : Tool
 	private void LineTweenSetter(float x)
 	{
 		_lineTween01 = x;
-		_lineRenderer.widthMultiplier = _lineTween01 * _lineRendererStartWidth;
+		for (int i = 0; i < _lineRenderers.Count; i++)
+		{
+			_lineRenderers[i].widthMultiplier = _lineTween01 * _lineRendererStartWidths[i];
+		}
 	}
 
 	public override void ReleasePrimary()
@@ -372,15 +382,15 @@ public class ToolGravitygun : Tool
 		Vector3 totalNormal = Vector3.zero;
 
 		RaycastHit hit;
-		if (Physics.SphereCast(playerCamera.position, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+		if (Physics.SphereCast(playerCamera.position, grabSpherecastRadius * .5f, playerCamera.forward, out hit, maxGrabDistance * 1.5f))
 			AddHit(hit);
-		if (Physics.SphereCast(playerCamera.position + playerCamera.up * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+		if (Physics.SphereCast(playerCamera.position + playerCamera.up * _normalRaycastDistance, grabSpherecastRadius * .5f, playerCamera.forward, out hit, maxGrabDistance * 1.5f))
 			AddHit(hit);
-		if (Physics.SphereCast(playerCamera.position - playerCamera.up * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+		if (Physics.SphereCast(playerCamera.position - playerCamera.up * _normalRaycastDistance, grabSpherecastRadius * .5f, playerCamera.forward, out hit, maxGrabDistance * 1.5f))
 			AddHit(hit);
-		if (Physics.SphereCast(playerCamera.position + playerCamera.right * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+		if (Physics.SphereCast(playerCamera.position + playerCamera.right * _normalRaycastDistance, grabSpherecastRadius * .5f, playerCamera.forward, out hit, maxGrabDistance * 1.5f))
 			AddHit(hit);
-		if (Physics.SphereCast(playerCamera.position - playerCamera.right * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+		if (Physics.SphereCast(playerCamera.position - playerCamera.right * _normalRaycastDistance, grabSpherecastRadius * .5f, playerCamera.forward, out hit, maxGrabDistance * 1.5f))
 			AddHit(hit);
 
 		void AddHit(RaycastHit hit)
@@ -433,27 +443,44 @@ public class ToolGravitygun : Tool
 
 	private void UpdateLine()
 	{
-		_lineRenderer.enabled = isHolding;
+		foreach (LineRenderer lineRenderer in _lineRenderers)
+		{
+			lineRenderer.enabled = isHolding;
+		}
 		
 		if (!isHolding) return;
 
-		Vector3 p0 = _lineRenderer.transform.position;
+		Vector3 p0 = _lineRenderers[0].transform.position;
 		Vector3 p1 = grabPoint.position;
-		Vector3 p2 = grabbedRigidbody.transform.TransformPoint(_grabbedLocalPoint);
+		Vector3 p3 = grabbedRigidbody.transform.TransformPoint(_grabbedLocalPoint);
+		Vector3 p2 = p3 + grabbedRigidbody.transform.TransformDirection(localGrabNormal) * _grabNormalOffset; 
 
-		int positionCount = _lineRenderer.positionCount;
+		int positionCount = _lineRenderers[0].positionCount;
 		for (int i = 0; i < positionCount; i++)
 		{
 			Vector3 point = Sample((float)i / (positionCount - 1));
-			Vector3 localPosition = _lineRenderer.transform.InverseTransformPoint(point);
-			_lineRenderer.SetPosition(i, localPosition * _lineTween01);
+			Vector3 localPosition = _lineRenderers[0].transform.InverseTransformPoint(point);
+			SetPosition(i, localPosition * _lineTween01);
 		}
 
 		Vector3 Sample(float perc01)
 		{
-			Vector3 lerp0 = Vector3.Lerp(p0, p1, perc01);
-			Vector3 lerp1 = Vector3.Lerp(p1, p2, perc01);
-			return Vector3.Lerp(lerp0, lerp1, perc01);
+			Vector3 lerpAB = Vector3.Lerp(p0, p1, perc01);
+			Vector3 lerpBC = Vector3.Lerp(p1, p2, perc01);
+			Vector3 lerpCD = Vector3.Lerp(p2, p3, perc01);
+
+			Vector3 startLerp = Vector3.Lerp(lerpAB, lerpBC, perc01);
+			Vector3 endLerp = Vector3.Lerp(lerpBC, lerpCD, perc01);
+			
+			return Vector3.Lerp(startLerp, endLerp, perc01);
+		}
+	}
+
+	private void SetPosition(int index, Vector3 pos)
+	{
+		foreach (LineRenderer lineRenderer in _lineRenderers)
+		{
+			lineRenderer.SetPosition(index, pos);
 		}
 	}
 
