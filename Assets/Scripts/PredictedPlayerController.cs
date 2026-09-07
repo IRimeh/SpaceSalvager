@@ -223,18 +223,19 @@ public class PredictedPlayerController : NetworkBehaviour
 		//Apply Roll Velocity and clamp it to max speed
 		rotationVelocity.z = Mathf.Clamp(NewRollVelocity, -keyboardRotationMaxSpeed, keyboardRotationMaxSpeed);
 
-
+		//calculate new Mouse Rotation Velocity and Interpolate it for schmooseness
 		Vector2 LookInputValue = LookInput.action.ReadValue<Vector2>();
 		mouseRotationVelocity += new Vector2(LookInputValue.x, -LookInputValue.y) * mouseRotationPerUnit;
 		mouseRotationVelocity *= Mathf.Exp(-mouseRotationDrag * Time.deltaTime);
 
-
+		//Make it Framerate independed
 		Vector3 rotationThisFrame = new Vector3(
 			mouseRotationVelocity.y,
 			mouseRotationVelocity.x,
 			rotationVelocity.z
 			) * Time.deltaTime;
 
+		//Rotate dat Ass
 		transform.Rotate(rotationThisFrame, Space.Self);
 
 		// UI Stuff
@@ -250,19 +251,20 @@ public class PredictedPlayerController : NetworkBehaviour
 		{
 			ApplyPhysicsLogic(currentThrustInput, isBraking);
 
-			// NEW: Apply the grappling hook force locally for client prediction
+			//Apply the grappling hook force locally for client prediction
 			rigidbody.AddForce(currentContinuousForce, ForceMode.Force);
 
 			if (!IsServer)
 			{
+				//Only Send Position and Force Updates in a fixed interval 
 				rpcTimer += Time.fixedDeltaTime;
 				if (rpcTimer >= RpcSendInterval)
 				{
-					// UPDATED: Now passes the continuous force to the server
 					SendInputServerRpc(currentThrustInput, isBraking, rigidbody.rotation, currentContinuousForce);
 					rpcTimer = 0.0f;
 				}
 
+				//Smoothly apply servervalues
 				rigidbody.position = Vector3.Lerp(rigidbody.position, serverPosition.Value, 0.1f);
 				rigidbody.linearVelocity = Vector3.Lerp(rigidbody.linearVelocity, serverLinearVelocity.Value, 0.1f);
 			}
@@ -273,7 +275,7 @@ public class PredictedPlayerController : NetworkBehaviour
 
 			ApplyPhysicsLogic(latestServerThrust, latestServerBraking);
 
-			// NEW: Server applies the synced grappling hook force authoritatively 
+			//Server applies the synced grappling hook force authoritatively 
 			rigidbody.AddForce(latestServerExternalForce, ForceMode.Force);
 		}
 		else
@@ -297,9 +299,15 @@ public class PredictedPlayerController : NetworkBehaviour
 		latestServerThrust = thrustInput;
 		latestServerBraking = braking;
 		latestServerRotation = clientRotation;
-		latestServerExternalForce = externalForce; // NEW
+		latestServerExternalForce = externalForce;
 	}
 
+
+	/// <summary>
+	/// Applies Movement Input Velocity to the Rigidbody. Should only be called in FixedUpdate.
+	/// </summary>
+	/// <param name="thrustInput"></param>
+	/// <param name="braking"></param>
 	private void ApplyPhysicsLogic(Vector3 thrustInput, bool braking)
 	{
 		Vector3 appliedVelocity;
@@ -328,11 +336,13 @@ public class PredictedPlayerController : NetworkBehaviour
 			newVelocity = Vector3.ClampMagnitude(newVelocity, maxAllowedSpeed);
 		}
 
+		//Wake up the rigidbody, because applying velocity manuelly does not do that
 		if (rigidbody.IsSleeping())
 		{
 			rigidbody.WakeUp();
 		}
 
+		//Apply the velocity baby
 		rigidbody.linearVelocity = newVelocity;
 	}
 }
