@@ -112,9 +112,7 @@ public class SpaceshipPart : NetworkBehaviour
 
 	public void EvaporatePart()
 	{
-		Debug.Log("EvaporatePart");
-
-		// Despawning is server-authoritative in Netcode for GameObjects.
+		// Evaporation is server-authoritative in Netcode for GameObjects.
 		// If we are a client, ask the server to perform the evaporation.
 		if (!IsServer)
 		{
@@ -128,21 +126,21 @@ public class SpaceshipPart : NetworkBehaviour
 	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
 	private void EvaporatePartServerRpc()
 	{
-		Debug.Log("EvaporatePartServerRpc");
 		ExecuteEvaporatePart();
 	}
 
 	private void ExecuteEvaporatePart()
 	{
-		Debug.Log("ExecuteEvaporatePart");
-		// First disconnect this part from all its neighbours (server-side logic).
-		ExecuteSeverPartFromAll();
-
-		// Then despawn & destroy the NetworkObject. This propagates to all clients.
-		NetworkObject netObj = NetworkObject;
-		if (netObj != null && netObj.IsSpawned)
+		// A SpaceshipPart has no NetworkObject of its own - NetworkObject resolves to the
+		// parent grid, so despawning it would destroy the whole remaining ship. Instead,
+		// hand off to the grid: it detaches this part, splits the remaining ship if it
+		// became disconnected, and destroys only this part on every peer.
+		// GetComponentInParent resolves the grid this part is CURRENTLY parented under,
+		// which also covers parts that were moved to a new grid by an earlier split.
+		SpaceshipGrid parentGrid = GetComponentInParent<SpaceshipGrid>();
+		if (parentGrid != null)
 		{
-			netObj.Despawn(true);
+			parentGrid.EvaporatePart(this);
 		}
 	}
 

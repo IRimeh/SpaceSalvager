@@ -12,14 +12,9 @@ public class ToolCutter : Tool
 	[SerializeField]
 	private float evaporateSpherecastRadius = 0.25f;
 
+	[SerializeField]
 	private Transform playerCamera;
 
-	protected override void OnNetworkPostSpawn()
-	{
-		if (!IsOwner) return;
-
-		playerCamera = transform.parent.parent;
-	}
 
 	public override void PressPrimary()
 	{
@@ -28,17 +23,11 @@ public class ToolCutter : Tool
 
 	public override void PressSecondary()
 	{
-		Debug.Log("PressSecondaryCutter");
-		
 		//TODO Evaporate Object babyyy
 		if (!IsOwner) return;
 
-		Debug.Log("TryGetLookedAtSpaceshipPart");
-
 		if (TryGetLookedAtSpaceshipPart(out SpaceshipPart spaceshipPart))
 		{
-			Debug.Log("Found Part");
-
 			// EvaporatePart handles the client -> server routing and despawn itself.
 			spaceshipPart.EvaporatePart();
 		}

@@ -25442,6 +25442,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8968033773557934240}
     - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 5623500556067009872}
+    - target: {fileID: 4872525930032275049, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: rotationSpring
       value: 25
       objectReference: {fileID: 0}
@@ -25461,6 +25465,14 @@ PrefabInstance:
       propertyPath: _shootParticles
       value: 
       objectReference: {fileID: 523109566715712310}
+    - target: {fileID: 6335232454961113779, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6335232454961113779, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.336
+      objectReference: {fileID: 0}
     - target: {fileID: 8712181326302731251, guid: 016bd7c9d36a95d4e8ef25ba1713870d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -25550,6 +25562,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5237396445133215634, guid: 5928b71ebccaaf244859c41753cd6bd3, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 5623500556067009872}
     - target: {fileID: 5334285609391025802, guid: 5928b71ebccaaf244859c41753cd6bd3, type: 3}
       propertyPath: m_Name
       value: tool_cutter

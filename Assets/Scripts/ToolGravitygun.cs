@@ -104,6 +104,8 @@ public class ToolGravitygun : Tool
 	private Rigidbody grabbedRigidbody;
 	private Interactable grabbedInteractable;
 	private RaycastHit grabbedHit;
+
+	[SerializeField]
 	private Transform playerCamera;
 
 	private Vector3 localGrabOffset;
@@ -141,13 +143,6 @@ public class ToolGravitygun : Tool
 		{
 			_lineRendererStartWidths.Add(_lineRenderers[i].widthMultiplier);
 		}
-	}
-
-	protected override void OnNetworkPostSpawn()
-	{
-		if (!IsOwner) return;
-
-		playerCamera = transform.parent.parent;
 	}
 
 	public override void PressPrimary()

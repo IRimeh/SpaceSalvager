@@ -92,6 +92,105 @@ public class SpaceshipGrid : NetworkBehaviour
 		return cluster;
 	}
 
+	/// <summary>
+	/// Server-authoritative removal of a part from this grid. Detaches the part from the
+	/// connection graph, splits the remaining ship into separate grids if removing the
+	/// part disconnected it, then destroys only the evaporated part on every peer.
+	/// </summary>
+	public void EvaporatePart(SpaceshipPart part)
+	{
+		if (!IsServer || part == null) return;
+
+		// 1. Detach the part from the graph WITHOUT triggering the per-connection split
+		// logic. The evaporating part must never join a cluster or be moved to a new grid.
+		foreach (SpaceshipPart neighbour in new List<SpaceshipPart>(part.connectedParts))
+		{
+			if (neighbour != null)
+			{
+				neighbour.connectedParts.Remove(part);
+			}
+		}
+		part.connectedParts.Clear();
+
+		// 2. If the remaining ship is no longer connected, keep the largest cluster on
+		// this grid and move each other cluster to its own grid.
+		SplitOffDisconnectedClusters(part);
+
+		// 3. Destroy only this part on every peer. The part never leaves this grid, so
+		// clients can find it among this grid's children by its SpaceshipPartId.
+		EvaporatePartClientRpc(part.SpaceshipPartId);
+		Destroy(part.gameObject);
+
+		// 4. Update physics without the evaporated part (Destroy is deferred to end of frame).
+		RecalculatePhysics(part);
+	}
+
+	private void SplitOffDisconnectedClusters(SpaceshipPart removedPart)
+	{
+		HashSet<SpaceshipPart> visited = new HashSet<SpaceshipPart> { removedPart };
+		List<List<SpaceshipPart>> clusters = new List<List<SpaceshipPart>>();
+
+		foreach (SpaceshipPart part in GetComponentsInChildren<SpaceshipPart>())
+		{
+			if (visited.Contains(part)) continue;
+
+			List<SpaceshipPart> cluster = GetConnectedCluster(part, visited);
+			if (cluster.Count > 0)
+			{
+				clusters.Add(cluster);
+			}
+		}
+
+		if (clusters.Count <= 1) return;
+
+		clusters.Sort((a, b) => b.Count.CompareTo(a.Count));
+		for (int i = 1; i < clusters.Count; i++)
+		{
+			MoveToNewGrid(clusters[i]);
+		}
+	}
+
+	private List<SpaceshipPart> GetConnectedCluster(SpaceshipPart start, HashSet<SpaceshipPart> visited)
+	{
+		List<SpaceshipPart> cluster = new List<SpaceshipPart>();
+		Queue<SpaceshipPart> queue = new Queue<SpaceshipPart>();
+
+		queue.Enqueue(start);
+		visited.Add(start);
+
+		while (queue.Count > 0)
+		{
+			SpaceshipPart current = queue.Dequeue();
+			cluster.Add(current);
+
+			foreach (SpaceshipPart neighbour in current.connectedParts)
+			{
+				if (neighbour != null && !visited.Contains(neighbour))
+				{
+					visited.Add(neighbour);
+					queue.Enqueue(neighbour);
+				}
+			}
+		}
+
+		return cluster;
+	}
+
+	[Rpc(SendTo.Everyone)]
+	private void EvaporatePartClientRpc(int partId)
+	{
+		if (IsServer) return;
+
+		foreach (SpaceshipPart part in GetComponentsInChildren<SpaceshipPart>())
+		{
+			if (part.SpaceshipPartId == partId)
+			{
+				Destroy(part.gameObject);
+				break;
+			}
+		}
+	}
+
 	private void MoveToNewGrid(List<SpaceshipPart> detachedParts)
 	{
 		Vector3 spawnPosition = detachedParts[0].transform.position;
@@ -153,7 +252,7 @@ public class SpaceshipGrid : NetworkBehaviour
 		}
 	}
 
-	private void RecalculatePhysics()
+	private void RecalculatePhysics(SpaceshipPart partToExclude = null)
 	{
 		if (!IsServer) return;
 
@@ -162,16 +261,20 @@ public class SpaceshipGrid : NetworkBehaviour
 
 		SpaceshipPart[] attachedParts = GetComponentsInChildren<SpaceshipPart>();
 
-		if (attachedParts.Length == 0) return;
-
 		float totalMass = 0f;
 		Vector3 worldCenterOfMass = Vector3.zero;
+		int countedParts = 0;
 
 		foreach (SpaceshipPart part in attachedParts)
 		{
+			if (part == partToExclude) continue;
+
 			totalMass += part.PartMass;
 			worldCenterOfMass += part.transform.position * part.PartMass;
+			countedParts++;
 		}
+
+		if (countedParts == 0) return;
 
 		worldCenterOfMass /= totalMass;
 
