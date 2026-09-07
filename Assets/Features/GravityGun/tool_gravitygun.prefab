@@ -5306,6 +5306,7 @@ Transform:
   - {fileID: 9197148108025729732}
   - {fileID: 2075322494727707806}
   - {fileID: 8712181326302731251}
+  - {fileID: 6332434138672584019}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4872525930032275049
@@ -5389,6 +5390,7 @@ MonoBehaviour:
   _duration: 0.2
   _vibrato: 12
   _elasticity: 0
+  _decalProjector: {fileID: 201997421190104560}
 --- !u!1 &5662059941417628775
 GameObject:
   m_ObjectHideFlags: 0
@@ -15591,4 +15593,77 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7188096590282992015, guid: 6f6b5fddf6afd254f9167439283512d1, type: 3}
   m_PrefabInstance: {fileID: 2045736740450483019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5949644254365376856
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1817334207921991136}
+    m_Modifications:
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.0956631
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.53519654
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.16472948
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1971932485434129933, guid: d886e33455841784190e80d097d804ce, type: 3}
+      propertyPath: m_Name
+      value: GravityGunHoldingDecal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d886e33455841784190e80d097d804ce, type: 3}
+--- !u!114 &201997421190104560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5790717045149574312, guid: d886e33455841784190e80d097d804ce, type: 3}
+  m_PrefabInstance: {fileID: 5949644254365376856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+--- !u!4 &6332434138672584019 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 391868835294524427, guid: d886e33455841784190e80d097d804ce, type: 3}
+  m_PrefabInstance: {fileID: 5949644254365376856}
   m_PrefabAsset: {fileID: 0}

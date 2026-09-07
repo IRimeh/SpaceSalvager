@@ -90,17 +90,22 @@ public class ToolGravitygun : Tool
 	private LineRenderer _lineRenderer;
 	[SerializeField] 
 	private float _lineTweenDuration = 0.5f;
+	[SerializeField] 
+	private float _normalRaycastDistance = 0.1f;
 
 	private bool isPulling;
+	private float _lineTween01 = 0;
 
 	private bool isHolding;
 	private bool isCharging;
 	private float currentCharge;
 	private Rigidbody grabbedRigidbody;
 	private Interactable grabbedInteractable;
+	private RaycastHit grabbedHit;
 	private Transform playerCamera;
 
 	private Vector3 localGrabOffset;
+	private Vector3 localGrabNormal;
 	private Quaternion initialGrabRotation;
 
 	private Vector3 _grabbedLocalPoint;
@@ -108,7 +113,14 @@ public class ToolGravitygun : Tool
 	private TweenerCore<float, float, FloatOptions> _lineTween;
 
 	public float CurrentCharge01 => Mathf.Clamp01(currentCharge / timeToMaxCharge);
+	public bool IsHolding => isHolding;
+	public Rigidbody GrabbedRigidbody => grabbedRigidbody;
+	public RaycastHit GrabbedHit => grabbedHit;
+	public Vector3 LocalGrabOffset => localGrabOffset;
+	public Vector3 LocalGrabNormal => localGrabNormal;
 	public event Action<float> OnShootEvent = delegate { };
+	public event Action<Interactable> OnStartHoldingEvent = delegate { };
+	public event Action<Interactable> OnStopHoldingEvent = delegate { };
 
 
 	// NEW: Sync the reel-in distance without RPC spam
@@ -136,25 +148,29 @@ public class ToolGravitygun : Tool
 	{
 		if (!IsOwner) return;
 
-		if (TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider, out Vector3 hitPoint))
+		if (TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider, out Vector3 hitPoint, out RaycastHit hit))
 		{
 			if (collider.TryGetComponent(out SpaceshipPart spaceshipPart))
 			{
 				spaceshipPart.SeverPartFromAll();
-				if (TryGetFirstHitInteractable(out interactable, out rigidbody, out collider, out hitPoint))
-					StartHolding(rigidbody, interactable, hitPoint);
+				if (TryGetFirstHitInteractable(out interactable, out rigidbody, out collider, out hitPoint, out hit))
+				{
+					StartHolding(rigidbody, interactable, hitPoint, hit);
+				}
 			}
 			else
 			{
-				StartHolding(rigidbody, interactable, hitPoint);
+				StartHolding(rigidbody, interactable, hitPoint, hit);
 			}
 		}
 	}
 
-	private void StartHolding(Rigidbody rigidbody, Interactable interactable, Vector3 hitPoint)
+	private void StartHolding(Rigidbody rigidbody, Interactable interactable, Vector3 hitPoint, RaycastHit hit)
 	{
+		grabbedHit = hit;
 		grabbedRigidbody = rigidbody;
 		localGrabOffset = grabbedRigidbody.transform.InverseTransformPoint(hitPoint);
+		localGrabNormal = grabbedRigidbody.transform.InverseTransformDirection(GetAverageLookAtNormal());
 		initialGrabRotation = grabbedRigidbody.rotation;
 		grabbedInteractable = interactable;
 
@@ -175,11 +191,15 @@ public class ToolGravitygun : Tool
 		_grabbedLocalPoint = rigidbody.transform.InverseTransformPoint(hitPoint);
 
 		_lineTween.Kill();
-		_lineTween = DOTween.To(() => _lineRenderer.widthMultiplier, (x) => 
-																	{
-																		_lineRenderer.widthMultiplier = x;
-																	}, _lineRendererStartWidth, _lineTweenDuration);
+		_lineTween = DOTween.To(() => _lineTween01, LineTweenSetter, 1, _lineTweenDuration);
 		GameCursor.SetCursorIsInteracting();
+		OnStartHoldingEvent.Invoke(interactable);
+	}
+
+	private void LineTweenSetter(float x)
+	{
+		_lineTween01 = x;
+		_lineRenderer.widthMultiplier = _lineTween01 * _lineRendererStartWidth;
 	}
 
 	public override void ReleasePrimary()
@@ -187,11 +207,14 @@ public class ToolGravitygun : Tool
 		if (!isHolding) return;
 		if (!IsOwner) return;
 		
+		OnStopHoldingEvent.Invoke(grabbedInteractable);
+		
 		grabbedInteractable.SetIsBeingHeldServerRpc(false);
 
 		isHolding = false;
 		grabbedRigidbody = null;
 		isPulling = false;
+		grabbedInteractable = null;
 
 		if (playerController != null)
 		{
@@ -202,10 +225,7 @@ public class ToolGravitygun : Tool
 		StopHoldingServerRpc();
 
 		_lineTween.Kill();
-		_lineTween = DOTween.To(() => _lineRenderer.widthMultiplier, (x) => 
-																{
-																	_lineRenderer.widthMultiplier = x;
-																}, 0.0f, _lineTweenDuration);
+		_lineTween = DOTween.To(() => _lineTween01, LineTweenSetter, 0, _lineTweenDuration);
 		GameCursor.SetCursorDefault();
 	}
 
@@ -315,11 +335,12 @@ public class ToolGravitygun : Tool
 		isPulling = false;
 	}
 
-	private bool TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider, out Vector3 hitPoint)
+	private bool TryGetFirstHitInteractable(out Interactable interactable, out Rigidbody rigidbody, out Collider collider, out Vector3 hitPoint, out RaycastHit outHit)
 	{
 		interactable = null;
 		rigidbody = null;
 		collider = null;
+		outHit = default;
 		hitPoint = Vector3.zero;
 		bool hitInteractable = false;
 
@@ -337,11 +358,38 @@ public class ToolGravitygun : Tool
 				collider = hit.collider;
 				hitPoint = hit.point;
 				hitInteractable = true;
+				outHit = hit;
 				break;
 			}
 		}
 
 		return hitInteractable;
+	}
+
+	private Vector3 GetAverageLookAtNormal()
+	{
+		int hitsCount = 0;
+		Vector3 totalNormal = Vector3.zero;
+
+		RaycastHit hit;
+		if (Physics.SphereCast(playerCamera.position, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+			AddHit(hit);
+		if (Physics.SphereCast(playerCamera.position + playerCamera.up * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+			AddHit(hit);
+		if (Physics.SphereCast(playerCamera.position - playerCamera.up * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+			AddHit(hit);
+		if (Physics.SphereCast(playerCamera.position + playerCamera.right * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+			AddHit(hit);
+		if (Physics.SphereCast(playerCamera.position - playerCamera.right * _normalRaycastDistance, grabSpherecastRadius, playerCamera.forward, out hit, maxGrabDistance))
+			AddHit(hit);
+
+		void AddHit(RaycastHit hit)
+		{
+			hitsCount++;
+			totalNormal += hit.normal;
+		}
+
+		return totalNormal / hitsCount;
 	}
 
 	private void Update()
@@ -398,7 +446,7 @@ public class ToolGravitygun : Tool
 		{
 			Vector3 point = Sample((float)i / (positionCount - 1));
 			Vector3 localPosition = _lineRenderer.transform.InverseTransformPoint(point);
-			_lineRenderer.SetPosition(i, localPosition);
+			_lineRenderer.SetPosition(i, localPosition * _lineTween01);
 		}
 
 		Vector3 Sample(float perc01)
@@ -542,7 +590,7 @@ public class ToolGravitygun : Tool
 		if (isHolding || isCharging)
 			return;
 
-		bool shouldShowInteractableCursor = TryGetFirstHitInteractable(out _, out _, out _, out _);
+		bool shouldShowInteractableCursor = TryGetFirstHitInteractable(out _, out _, out _, out _, out _);
 		if (shouldShowInteractableCursor)
 			GameCursor.SetCursorCanInteract();
 		else
