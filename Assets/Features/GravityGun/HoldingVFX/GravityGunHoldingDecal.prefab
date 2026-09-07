@@ -53,10 +53,10 @@ MonoBehaviour:
   m_UVBias: {x: 0, y: 0}
   m_RenderingLayerMask:
     serializedVersion: 0
-    m_Bits: 3
+    m_Bits: 2
   m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0.7, y: 0.7, z: 0.7}
+  m_Offset: {x: 0, y: 0, z: -0.4}
+  m_Size: {x: 0.7, y: 0.7, z: 2}
   m_FadeFactor: 1
   m_VisibleInScene: 1
   version: 1
