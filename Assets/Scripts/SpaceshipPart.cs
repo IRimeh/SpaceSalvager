@@ -29,9 +29,53 @@ public class SpaceshipPart : NetworkBehaviour
 	[Tooltip("Auto-calculated as mesh volume * material density. Read-only.")]
 	public float PartMass = 10f;
 
+	[Header("Heat / Cutting")]
+	[Tooltip("Multiplier turning PartMass into the total heat required to evaporate. heatNeeded = PartMass * heatPerMass.")]
+	[SerializeField]
+	private float heatPerMass = 1f;
+
+	[Tooltip("How fast the part cools (in heat01 units per second) when no cutter is heating it. Should be higher than typical heat rate so cooling is faster than heating.")]
+	[SerializeField]
+	private float coolSpeed01 = 1.5f;
+
+	[Tooltip("Seconds without a heartbeat before a cutter contributor is dropped (handles release, look-away, target switch, disconnect).")]
+	[SerializeField]
+	private float contributorTimeout = 0.3f;
+
+	[Tooltip("Minimum interval between server -> clients heat broadcasts.")]
+	[SerializeField]
+	private float heatBroadcastInterval = 0.1f;
+
+	[Tooltip("Color the base color lerps toward as the part fully heats up.")]
+	[SerializeField]
+	private Color hotColor = Color.red;
+
+	// Server-only: active cutter contributions keyed by client id.
+	private struct HeatContribution
+	{
+		public int strength;
+		public float lastSeen;
+	}
+	private readonly Dictionary<ulong, HeatContribution> contributors = new();
+
+	// Server-authoritative heat [0,1]; targetHeat01 is the last broadcast value; displayHeat01 is the smoothed local visual.
+	private float heat01;
+	private float targetHeat01;
+	private float displayHeat01;
+	private float lastBroadcastTime;
+	private float lastBroadcastValue = -1f;
+
+	// Visual state (all peers).
+	private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+	private MaterialPropertyBlock heatPropertyBlock;
+	private Color originalBaseColor = Color.white;
+	private bool capturedOriginalColor;
+	private bool heatOverrideActive;
+
 	private void OnEnable()
 	{
 		meshRenderer = GetComponent<MeshRenderer>();
+		CaptureOriginalBaseColor();
 
 		for (int i = connectedParts.Count - 1; i >= 0; i--)
 		{
@@ -177,5 +221,138 @@ public class SpaceshipPart : NetworkBehaviour
 				parentGrid.SeverConnection(this, neighbour);
 			}
 		}
+	}
+
+	// ---------------------------------------------------------------------
+	// Heat-up / cool-down cutting
+	// ---------------------------------------------------------------------
+
+	private void CaptureOriginalBaseColor()
+	{
+		if (capturedOriginalColor) return;
+		if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
+		if (meshRenderer == null || meshRenderer.sharedMaterial == null) return;
+
+		if (meshRenderer.sharedMaterial.HasProperty(BaseColorId))
+			originalBaseColor = meshRenderer.sharedMaterial.GetColor(BaseColorId);
+
+		capturedOriginalColor = true;
+	}
+
+	/// <summary>
+	/// Client -> Server heartbeat: a cutter is currently heating this part with the given strength.
+	/// Contributors are keyed by client id and time out automatically if heartbeats stop.
+	/// </summary>
+	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+	public void HeatContributionServerRpc(int strength, RpcParams rpcParams = default)
+	{
+		ulong senderId = rpcParams.Receive.SenderClientId;
+		contributors[senderId] = new HeatContribution { strength = strength, lastSeen = Time.time };
+	}
+
+	private void Update()
+	{
+		if (IsServer)
+			ServerUpdateHeat();
+
+		if (IsClient || IsServer)
+			ClientUpdateHeatVisual();
+	}
+
+	private void ServerUpdateHeat()
+	{
+		// 1. Drop stale contributors (release / look-away / target switch / disconnect).
+		if (contributors.Count > 0)
+		{
+			float now = Time.time;
+			// Copy keys to avoid mutating the dictionary while iterating.
+			List<ulong> stale = null;
+			foreach (KeyValuePair<ulong, HeatContribution> kvp in contributors)
+			{
+				if (now - kvp.Value.lastSeen > contributorTimeout)
+				{
+					stale ??= new List<ulong>();
+					stale.Add(kvp.Key);
+				}
+			}
+			if (stale != null)
+				foreach (ulong id in stale)
+					contributors.Remove(id);
+		}
+
+		// 2. Total heat rate = sum of (strength - cutResistance) for contributors above resistance.
+		int totalRate = 0;
+		foreach (KeyValuePair<ulong, HeatContribution> kvp in contributors)
+		{
+			int effective = kvp.Value.strength - cutResistance;
+			if (effective > 0) totalRate += effective;
+		}
+
+		float heatNeeded = Mathf.Max(0.0001f, PartMass * heatPerMass);
+
+		if (totalRate > 0)
+			heat01 += (totalRate / heatNeeded) * Time.deltaTime;
+		else
+			heat01 -= coolSpeed01 * Time.deltaTime;
+
+		heat01 = Mathf.Clamp01(heat01);
+
+		// 3. Evaporate when fully heated (reuses existing server-authoritative grid path).
+		if (heat01 >= 1f)
+		{
+			heat01 = 1f;
+			BroadcastHeat(force: true);
+			ExecuteEvaporatePart();
+			return;
+		}
+
+		// 4. Throttled broadcast to all peers when the value changed meaningfully.
+		if (Time.time - lastBroadcastTime >= heatBroadcastInterval &&
+			!Mathf.Approximately(heat01, lastBroadcastValue))
+		{
+			BroadcastHeat(force: false);
+		}
+	}
+
+	private void BroadcastHeat(bool force)
+	{
+		lastBroadcastTime = Time.time;
+		lastBroadcastValue = heat01;
+		UpdateHeatClientRpc(heat01);
+	}
+
+	[Rpc(SendTo.Everyone)]
+	private void UpdateHeatClientRpc(float value)
+	{
+		targetHeat01 = value;
+	}
+
+	private void ClientUpdateHeatVisual()
+	{
+		// Smoothly approach the last networked heat value.
+		displayHeat01 = Mathf.MoveTowards(displayHeat01, targetHeat01, Mathf.Max(coolSpeed01, 2f) * Time.deltaTime);
+
+		if (displayHeat01 <= 0.001f)
+		{
+			// Fully cool: clear any override so the exact original material shows again.
+			if (heatOverrideActive && meshRenderer != null)
+			{
+				heatPropertyBlock ??= new MaterialPropertyBlock();
+				meshRenderer.GetPropertyBlock(heatPropertyBlock);
+				heatPropertyBlock.SetColor(BaseColorId, originalBaseColor);
+				meshRenderer.SetPropertyBlock(heatPropertyBlock);
+				heatOverrideActive = false;
+			}
+			return;
+		}
+
+		if (meshRenderer == null) return;
+		CaptureOriginalBaseColor();
+
+		heatPropertyBlock ??= new MaterialPropertyBlock();
+		meshRenderer.GetPropertyBlock(heatPropertyBlock);
+		heatPropertyBlock.SetColor(BaseColorId, Color.Lerp(originalBaseColor, hotColor, displayHeat01));
+		meshRenderer.SetPropertyBlock(heatPropertyBlock);
+		heatOverrideActive = true;
 	}
 }

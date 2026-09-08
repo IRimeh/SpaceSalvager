@@ -1,10 +1,8 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class SpaceshipGrid : NetworkBehaviour
 {
@@ -18,6 +16,79 @@ public class SpaceshipGrid : NetworkBehaviour
 		}
 
 		RecalculatePhysics();
+	}
+
+	/// <summary>
+	/// Recalculates the mass of all child <see cref="SpaceshipPart"/> components
+	/// and updates this grid's Rigidbody mass and center of mass resulting from the children's mass.
+	/// </summary>
+	[ContextMenu("Calculate Mass")]
+	public void CalculateMass()
+	{
+		SpaceshipPart[] allParts = GetComponentsInChildren<SpaceshipPart>(true);
+		List<SpaceshipPart> myParts = new List<SpaceshipPart>();
+
+		foreach (SpaceshipPart part in allParts)
+		{
+			if (part != null && part.GetComponentInParent<SpaceshipGrid>() == this)
+			{
+				myParts.Add(part);
+			}
+		}
+
+#if UNITY_EDITOR
+		foreach (SpaceshipPart part in myParts)
+		{
+			UnityEditor.Undo.RecordObject(part, "Calculate Mass");
+			part.RecalculateMass();
+			UnityEditor.EditorUtility.SetDirty(part);
+		}
+#else
+		foreach (SpaceshipPart part in myParts)
+		{
+			part.RecalculateMass();
+		}
+#endif
+
+		Rigidbody rb = GetComponent<Rigidbody>();
+		if (rb != null)
+		{
+#if UNITY_EDITOR
+			UnityEditor.Undo.RecordObject(rb, "Calculate Mass");
+#endif
+			float totalMass = 0f;
+			Vector3 worldCenterOfMass = Vector3.zero;
+			int countedParts = 0;
+
+			foreach (SpaceshipPart part in myParts)
+			{
+				if (part == null || !part.gameObject.activeInHierarchy) continue;
+
+				totalMass += part.PartMass;
+				worldCenterOfMass += part.transform.position * part.PartMass;
+				countedParts++;
+			}
+
+			if (countedParts > 0 && totalMass > 0f)
+			{
+				worldCenterOfMass /= totalMass;
+				rb.mass = totalMass;
+				rb.centerOfMass = transform.InverseTransformPoint(worldCenterOfMass);
+			}
+
+#if UNITY_EDITOR
+			UnityEditor.EditorUtility.SetDirty(rb);
+#endif
+
+			if (Application.isPlaying)
+			{
+				rb.WakeUp();
+			}
+		}
+
+#if UNITY_EDITOR
+		UnityEditor.EditorUtility.SetDirty(this);
+#endif
 	}
 
 	public void SeverConnection(SpaceshipPart partA, SpaceshipPart partB) {

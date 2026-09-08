@@ -15194,7 +15194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1500442710
+  GlobalObjectIdHash: 3499476048
   InScenePlacedSourceGlobalObjectIdHash: 3499476048
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -25561,6 +25561,10 @@ PrefabInstance:
     - target: {fileID: 351897888377698723, guid: 5928b71ebccaaf244859c41753cd6bd3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5237396445133215634, guid: 5928b71ebccaaf244859c41753cd6bd3, type: 3}
+      propertyPath: cutStrength
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5237396445133215634, guid: 5928b71ebccaaf244859c41753cd6bd3, type: 3}
       propertyPath: playerCamera

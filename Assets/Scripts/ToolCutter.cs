@@ -15,6 +15,13 @@ public class ToolCutter : Tool
 	[SerializeField]
 	private Transform playerCamera;
 
+	[Tooltip("Seconds between heat heartbeats sent to the aimed part while secondary is held.")]
+	[SerializeField]
+	private float contributionSendInterval = 0.1f;
+
+	private bool isHeating;
+	private float lastContributionTime;
+
 
 	public override void PressPrimary()
 	{
@@ -23,13 +30,33 @@ public class ToolCutter : Tool
 
 	public override void PressSecondary()
 	{
-		//TODO Evaporate Object babyyy
 		if (!IsOwner) return;
+
+		// Begin heating: hold to heat the aimed part until it evaporates. Send an
+		// immediate heartbeat so heating starts without waiting for the interval.
+		isHeating = true;
+		lastContributionTime = float.NegativeInfinity;
+		SendHeatContribution();
+	}
+
+	private void Update()
+	{
+		if (!IsOwner || !isHeating) return;
+
+		if (Time.time - lastContributionTime >= contributionSendInterval)
+		{
+			SendHeatContribution();
+		}
+	}
+
+	private void SendHeatContribution()
+	{
+		lastContributionTime = Time.time;
 
 		if (TryGetLookedAtSpaceshipPart(out SpaceshipPart spaceshipPart))
 		{
-			// EvaporatePart handles the client -> server routing and despawn itself.
-			spaceshipPart.EvaporatePart();
+			// Server accumulates heat from all contributors; it decides when to evaporate.
+			spaceshipPart.HeatContributionServerRpc(cutStrength);
 		}
 	}
 
@@ -67,7 +94,11 @@ public class ToolCutter : Tool
 
 	public override void ReleaseSecondary()
 	{
-		
+		if (!IsOwner) return;
+
+		// Stop sending heartbeats. The server times out this contributor shortly
+		// after, and the part cools down if no other cutter is heating it.
+		isHeating = false;
 	}
 
 	public override void ReleaseTertiary()
